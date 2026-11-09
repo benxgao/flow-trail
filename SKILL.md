@@ -415,7 +415,6 @@ bash <this-skill>/scripts/verify-outcome.sh --run
 - `docs/faq.md` — the answers kept off the README: cost, merges, two people, a dead rule.
 - `examples/login-refactor/` — a board mid-flight, with a runnable `app/`.
 - `.claude-plugin/` — the manifest that makes `npx skills add` and `/plugin marketplace add` work.
-- `references/design-notes.md` — the two blind runs, and why every rule exists.
 
 ## What it deliberately does not have
 

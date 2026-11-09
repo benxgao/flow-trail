@@ -59,6 +59,13 @@ trying to do.
 - **Can I use it in a repository with no tests?** Yes. `findings.md` holds a command and its
   output, and a command that prints nothing is still evidence.
 
+## Where it runs
+
+- **Windows?** The scripts and the hook are bash; lint and the session line need WSL or Git Bash.
+  A card is markdown and opens anywhere.
+- **A folder that is not a git repository?** Moves become `mv`, so `git log --follow` is gone.
+  The board still reads; the trail does not.
+
 ## Rules and what they cost
 
 - **Why one card in `doing/` at a time?** Two cards mean two `next:` lines, and a new session

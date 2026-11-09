@@ -6,7 +6,7 @@ One command, then the routes for a harness that does not take it.
 npx skills add benxgao/flow-trail -g
 ```
 
-- Installs for the current user, in the skills folder the harness already reads.
+- Installs for the current user, into the skills folder of each harness it recognises.
 - Nothing else to configure: the first card creates the folders it needs.
 
 ## Two folders cover most harnesses
@@ -33,6 +33,7 @@ ln -s ~/src/flow-trail ~/.claude/skills/flow-trail
 ```
 
 - `npx skills add` works here too, into `~/.claude/skills/`. Take one route, not both.
+- Only `npx skills add` has been run end to end; treat the `/plugin` pair as untested.
 - Hook: `.claude/settings.json`, matcher `startup|resume|clear|compact` — [hooks.md](hooks.md).
 - It reads `CLAUDE.md` at startup and not `AGENTS.md`: symlink one at the other.
 
@@ -83,7 +84,16 @@ read: AGENTS.md
 
 ## WorkBuddy / CodeBuddy
 
-- Skills: `~/.workbuddy-ai/skills/flow-trail/`, or `npx skills add ... -g`.
+- WorkBuddy reads `~/.workbuddy-ai/skills/flow-trail/`; per project, `.workbuddy-ai/skills/`.
+- `npx skills add` ships a fixed list of harnesses, and WorkBuddy is not on it.
+- The CLI still writes `~/.agents/skills/flow-trail`, so nothing lands where WorkBuddy looks.
+- Link that copy into the folder WorkBuddy loads, then restart the app.
+
+```bash
+ln -s ~/.agents/skills/flow-trail ~/.workbuddy-ai/skills/flow-trail
+```
+
+- CodeBuddy is a separate product: `~/.codebuddy/skills/`, written by the CLI directly.
 - Hook file: `~/.workbuddy/settings.json`; per project, `.workbuddy/settings.json`.
 - The JSON for both is in [hooks.md](hooks.md).
 - Desktop app and CLI do not always read the same settings file.

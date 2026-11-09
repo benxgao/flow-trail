@@ -22,6 +22,9 @@ Test it before wiring anything:
 bash ~/.claude/skills/flow-trail/scripts/session-start.sh   # run inside a project
 ```
 
+- In a wired session, a board that exists with no `next:` line printed means the hook did not fire.
+- A hook in the wrong settings file fails silently, so check this before trusting the wiring.
+
 ## Claude Code
 
 `.claude/settings.json` for one project, `~/.claude/settings.json` for every project:

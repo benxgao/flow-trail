@@ -11,6 +11,23 @@
 
 ### Removed
 
+## 0.1.1 — 2026-11-09
+
+Install routes and the places it runs, from the first week.
+
+### Added
+
+- FAQ section "Where it runs": Windows needs WSL or Git Bash; a folder outside git loses
+  `git log --follow`.
+- WorkBuddy and CodeBuddy install steps, with the symlink `npx skills add` does not create.
+- Two checks that tell a wired session-start hook did not fire.
+
+### Changed
+
+- `docs/install.md` names `npx skills add` as the one route run end to end.
+- README states the measurement was on Claude Code, and that the history starts at extraction.
+- `references/design-notes.md` trimmed; `SKILL.md` no longer lists it among the files.
+
 ## 0.1.0 — 2026-11-09
 
 First release.

@@ -26,6 +26,9 @@
 npx skills add benxgao/flow-trail -g
 ```
 
+- Measured on Claude Code. WorkBuddy and editors that read only `AGENTS.md` need one more step;
+  [install](docs/install.md) names it.
+
 Then say what you want, in your own words. No config, no folder to create:
 
 | Say | What comes back |
@@ -122,12 +125,13 @@ Four other tools keep a plan outside the chat, each pointed at a different job.
   There is no view to refresh.
 - **What if I stop using it?** The folders stay and stay readable. Nothing to uninstall.
 
-Twenty-nine more, on cost, merges, two people and a decision that turns out wrong:
+Thirty-one more, on cost, merges, two people and a decision that turns out wrong:
 [the full FAQ](docs/faq.md).
 
 ## Evidence
 
 - **Five months on a real product.** 52 commits, 10 closed cards, before extraction.
+- **The history here begins at extraction.** The 52 commits stayed in the source repository.
 - **Tested twice blind.** Both runs changed the design: [design notes](references/design-notes.md).
 - **Three columns, not five.** Four closing phases were completed 0 times in 7 plans.
 - **Every rule states its measurement.** The docs are checked by a script.
@@ -137,11 +141,11 @@ Twenty-nine more, on cost, merges, two people and a decision that turns out wron
 - [Example board](examples/) — mid-flight, three cards, ready to read.
 - [Install](docs/install.md) — other harnesses, the hook, the two scripts.
 - [How it works](docs/how-it-works.md) — columns, files, phases, markers, closing.
-- [FAQ](docs/faq.md) — twenty-nine questions kept off this page.
+- [FAQ](docs/faq.md) — thirty-one questions kept off this page.
 - [Hooks](docs/hooks.md) — make it fire automatically, per harness.
 - [Design notes](references/design-notes.md) — every rule, and its measurement.
 
-Try one card. If you never come back to it, it cost one page.
+Try one card. If you never come back to it, it cost three files.
 
 MIT. See [LICENSE](LICENSE).
 
