@@ -1,0 +1,53 @@
+<svg viewBox="0 0 680 532" width="680" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>What the three files of one work folder hold</title>
+<desc>Three blocks, one per file. README.md, kept, has six fixed sections: Outcome, Contract, Decisions, Lessons, Residual, Where the proof lives, each with its purpose. findings.md, kept, has no fixed set, so it lists the headings it usually grows: Measurements, Verbatim output, Excerpts, Long tables, Why an option lost. progress.md, deleted at close, holds front matter, Baseline, Phases and Session notes.</desc>
+<text x="40" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#888780">What the three files hold</text>
+
+<text x="40" y="56" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#2C2C2A">README.md</text>
+<text x="132" y="56" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#888780">the conclusions, one page</text>
+<text x="640" y="56" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#0F6E56" text-anchor="end">kept</text>
+
+<text x="40" y="90" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Outcome</text>
+<text x="200" y="90" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">what changed, and the number that shows it</text>
+<text x="40" y="110" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Contract</text>
+<text x="200" y="110" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">what must still hold, and the check for it</text>
+<text x="40" y="130" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Decisions</text>
+<text x="200" y="130" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">the choice, why, and what was rejected</text>
+<text x="40" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Lessons</text>
+<text x="200" y="150" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">where the next attempt goes differently</text>
+<text x="40" y="170" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Residual</text>
+<text x="200" y="170" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">what is still open, and where it went</text>
+<text x="40" y="190" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Where the proof lives</text>
+<text x="200" y="190" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">the file or command behind each claim</text>
+
+<text x="40" y="226" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#2C2C2A">findings.md</text>
+<text x="132" y="226" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#888780">the evidence behind them</text>
+<text x="640" y="226" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#0F6E56" text-anchor="end">kept</text>
+
+<text x="40" y="260" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Measurements</text>
+<text x="200" y="260" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">every number, with the command that printed it</text>
+<text x="40" y="280" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Verbatim output</text>
+<text x="200" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">the failure as it printed, never retyped</text>
+<text x="40" y="300" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Excerpts</text>
+<text x="200" y="300" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">the code before the change</text>
+<text x="40" y="320" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Long tables</text>
+<text x="200" y="320" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">bulk that would crowd the README</text>
+<text x="40" y="340" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A" font-weight="600">Why an option lost</text>
+<text x="200" y="340" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">the full argument behind a rejection</text>
+<text x="40" y="358" font-family="system-ui, -apple-system, sans-serif" font-size="9.5" fill="#A8A69E">No fixed set: one heading per piece of evidence.</text>
+
+<text x="40" y="394" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#5F5E5A">progress.md</text>
+<text x="132" y="394" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#888780">where the work stands</text>
+<text x="640" y="394" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#A8A69E" text-anchor="end">deleted at close</text>
+
+<text x="40" y="428" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#5F5E5A" font-weight="600">Front matter</text>
+<text x="200" y="428" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#8C8A82">status, phases, the next action</text>
+<text x="40" y="448" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#5F5E5A" font-weight="600">Baseline</text>
+<text x="200" y="448" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#8C8A82">each metric before the first edit</text>
+<text x="40" y="468" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#5F5E5A" font-weight="600">Phases</text>
+<text x="200" y="468" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#8C8A82">goal, files, Verify command, checklist</text>
+<text x="40" y="488" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#5F5E5A" font-weight="600">Session notes</text>
+<text x="200" y="488" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#8C8A82">what was done, run, and dropped</text>
+
+<text x="40" y="516" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#444441">Two files stay. The third is deleted when the work closes.</text>
+</svg>

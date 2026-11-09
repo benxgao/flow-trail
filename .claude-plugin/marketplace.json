@@ -1,0 +1,22 @@
+{
+  "name": "flow-trail",
+  "description": "Plan files that outlive the chat, and can re-prove themselves.",
+  "owner": {
+    "name": "Ben Gao",
+    "url": "https://github.com/benxgao"
+  },
+  "plugins": [
+    {
+      "name": "flow-trail",
+      "source": "./",
+      "description": "A card per piece of work: the conclusions, the evidence, and the state that dies at close.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Ben Gao"
+      },
+      "homepage": "https://github.com/benxgao/flow-trail",
+      "license": "MIT",
+      "keywords": ["planning", "context-engineering", "session-memory", "markdown"]
+    }
+  ]
+}

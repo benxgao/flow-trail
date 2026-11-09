@@ -1,0 +1,60 @@
+<svg viewBox="0 0 680 388" width="680" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Where flow-trail sits in a repository</title>
+<desc>A normal project tree — src, tests, docs, package.json — untouched. One flow-trail folder holds the board: README.md and the three columns backlog, doing and done. doing holds one card, login-refactor, with README.md and findings.md kept and progress.md deleted at close. done holds the closed cards.</desc>
+<text x="32" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#888780">Your repository, with one board in it</text>
+<rect x="32" y="44" width="616" height="304" rx="10" fill="#FFFFFF" stroke="#DCDAD3" stroke-width="0.5"/>
+
+<text x="56" y="68" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#2C2C2A">your-project/</text>
+
+<text x="80" y="88" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#C0BEB6">├─</text>
+<text x="102" y="88" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5F5E5A">src/</text>
+<text x="80" y="108" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#C0BEB6">├─</text>
+<text x="102" y="108" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5F5E5A">tests/</text>
+<text x="80" y="128" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#C0BEB6">├─</text>
+<text x="102" y="128" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5F5E5A">docs/</text>
+<text x="80" y="148" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#C0BEB6">├─</text>
+<text x="102" y="148" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5F5E5A">package.json</text>
+
+<text x="80" y="168" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#0F6E56">└─</text>
+<text x="102" y="168" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#0F6E56">flow-trail/</text>
+<text x="322" y="168" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#5F5E5A">the board</text>
+
+<text x="104" y="188" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5DCAA5">├─</text>
+<text x="126" y="188" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#0F6E56">README.md</text>
+<text x="322" y="188" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#888780">what this folder is, one page</text>
+
+<text x="104" y="208" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5DCAA5">├─</text>
+<text x="126" y="208" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#0F6E56">backlog/</text>
+<text x="322" y="208" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#888780">an idea that waits, one page</text>
+
+<text x="104" y="228" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5DCAA5">├─</text>
+<text x="126" y="228" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#0F6E56">doing/</text>
+<text x="322" y="228" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#888780">one card at a time</text>
+
+<text x="104" y="248" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5DCAA5">│</text>
+<text x="128" y="248" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5DCAA5">└─</text>
+<text x="150" y="248" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#0F6E56">login-refactor/</text>
+
+<text x="104" y="268" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5DCAA5">│</text>
+<text x="128" y="268" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5DCAA5">├─</text>
+<text x="150" y="268" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#0F6E56">README.md</text>
+<text x="322" y="268" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#5F5E5A">what we decided, and why</text>
+<text x="632" y="268" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#0F6E56" text-anchor="end">kept</text>
+
+<text x="104" y="288" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5DCAA5">│</text>
+<text x="128" y="288" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5DCAA5">├─</text>
+<text x="150" y="288" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#0F6E56">findings.md</text>
+<text x="322" y="288" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#5F5E5A">the evidence behind them</text>
+<text x="632" y="288" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#0F6E56" text-anchor="end">kept</text>
+
+<text x="104" y="308" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#C0BEB6">│</text>
+<text x="128" y="308" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#C0BEB6">└─</text>
+<text x="150" y="308" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#A8A69E">progress.md</text>
+<text x="322" y="308" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#A8A69E">where we stopped; deleted at close</text>
+
+<text x="104" y="328" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#5DCAA5">└─</text>
+<text x="126" y="328" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#0F6E56">done/</text>
+<text x="322" y="328" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#888780">closed cards: README and findings</text>
+
+<text x="32" y="372" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#444441">One folder. Everything outside it is untouched.</text>
+</svg>

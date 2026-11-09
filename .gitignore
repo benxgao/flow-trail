@@ -1,0 +1,21 @@
+# OS and editor locals.
+.DS_Store
+.history/
+
+# Author identity for local `git log`. Not repository content.
+.mailmap
+
+# Local only, never shipped: assistant notes, secrets, dependencies, logs.
+# AI copilots coding assistants
+.cursor/
+.continue/
+.windsurf/
+.aider*
+.clinerules
+.cursorrules
+.workbuddy-ai/
+
+.env
+.env.*
+node_modules/
+*.log

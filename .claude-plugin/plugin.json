@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "flow-trail",
+  "displayName": "flow-trail",
+  "version": "0.1.0",
+  "description": "Track work larger than one session on a board of three folders. Every number keeps the command that produced it.",
+  "author": {
+    "name": "Ben Gao",
+    "url": "https://github.com/benxgao"
+  },
+  "homepage": "https://github.com/benxgao/flow-trail",
+  "repository": "https://github.com/benxgao/flow-trail",
+  "license": "MIT",
+  "keywords": [
+    "planning",
+    "context-engineering",
+    "session-memory",
+    "markdown",
+    "code-review"
+  ],
+  "skills": ["./"]
+}

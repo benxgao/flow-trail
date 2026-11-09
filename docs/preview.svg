@@ -1,0 +1,51 @@
+<svg viewBox="0 0 680 344" width="680" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>A flow-trail board: three folders, one card in each</title>
+<desc>Three columns. backlog holds one card with a single README: the idea, the trigger, the sketch. doing holds one card with three files: README.md, findings.md and progress.md, the last carrying the phase list and the next action. done holds one card with two files: progress.md was deleted at close.</desc>
+<text x="32" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#888780">The board: three folders, one card each</text>
+
+<rect x="32" y="44" width="190" height="252" rx="12" fill="#FBFAF6" stroke="#E8E5DD" stroke-width="0.5"/>
+<text x="46" y="68" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#2C2C2A">backlog/</text>
+<text x="46" y="86" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#A8A69E">one page</text>
+<path d="M46 96 L208 96" stroke="#EDEBE4" stroke-width="0.5"/>
+
+<rect x="44" y="108" width="166" height="72" rx="8" fill="#FFFFFF" stroke="#DCDAD3" stroke-width="0.5"/>
+<text x="58" y="130" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A">export-csv</text>
+<text x="58" y="148" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10.5" fill="#888780">README.md</text>
+<text x="58" y="166" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#A8A69E">idea, trigger, sketch</text>
+
+<text x="46" y="204" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#C0BEB6">waits for a trigger</text>
+
+<rect x="245" y="44" width="200" height="252" rx="12" fill="#FBFAF6" stroke="#E8E5DD" stroke-width="0.5"/>
+<text x="259" y="68" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#2C2C2A">doing/</text>
+<text x="259" y="86" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#A8A69E">three files</text>
+<path d="M259 96 L431 96" stroke="#EDEBE4" stroke-width="0.5"/>
+
+<rect x="257" y="108" width="176" height="140" rx="8" fill="#FFFFFF" stroke="#DCDAD3" stroke-width="0.5"/>
+<text x="271" y="130" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A">login-refactor</text>
+<text x="271" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10.5" fill="#888780">README.md</text>
+<text x="271" y="166" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10.5" fill="#888780">findings.md</text>
+<text x="271" y="182" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10.5" fill="#0F6E56">progress.md</text>
+<path d="M271 194 L419 194" stroke="#F1EFE8" stroke-width="0.5"/>
+<text x="271" y="212" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#5F5E5A">P2 written, not run</text>
+<text x="271" y="230" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#0F6E56">next: npm test</text>
+
+<text x="259" y="272" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#C0BEB6">one card at a time</text>
+
+<rect x="468" y="44" width="180" height="252" rx="12" fill="#FBFAF6" stroke="#E8E5DD" stroke-width="0.5"/>
+<text x="482" y="68" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12.5" fill="#2C2C2A">done/</text>
+<text x="482" y="86" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#A8A69E">two files</text>
+<path d="M482 96 L634 96" stroke="#EDEBE4" stroke-width="0.5"/>
+
+<rect x="480" y="108" width="156" height="100" rx="8" fill="#FFFFFF" stroke="#DCDAD3" stroke-width="0.5"/>
+<text x="494" y="130" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#2C2C2A">cutoff-tests</text>
+<text x="494" y="150" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10.5" fill="#888780">README.md</text>
+<text x="494" y="166" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10.5" fill="#888780">findings.md</text>
+<text x="494" y="186" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#A8A69E">no progress.md</text>
+
+<path d="M226 176 L238 176" stroke="#C0BEB6" stroke-width="1"/>
+<polygon points="238,172 244,176 238,180" fill="#C0BEB6"/>
+<path d="M449 176 L461 176" stroke="#C0BEB6" stroke-width="1"/>
+<polygon points="461,172 467,176 461,180" fill="#C0BEB6"/>
+
+<text x="32" y="326" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#444441">A card moves with git mv. The column is the path, so nothing else records it.</text>
+</svg>
