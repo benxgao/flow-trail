@@ -1,137 +1,117 @@
-# Install, per harness
+# Install
 
-One command, then the routes for a harness that does not take it.
+One paste at your agent, or the same two commands typed by you. Both end in the same place.
+
+## Install with your agent
+
+Paste this into the agent, with the repository open:
+
+```text
+Install flow-trail in this repository.
+
+1. Run, from the repository root:
+   git clone -q --depth 1 https://github.com/benxgao/flow-trail ~/.flow-trail 2>/dev/null || git -C ~/.flow-trail pull -q
+   bash ~/.flow-trail/scripts/install.sh
+2. Show me the whole output of the second command.
+3. Do not edit AGENTS.md, .gitignore or flow-trail/ yourself: the installer writes those.
+4. Tell me the sentence it printed for opening the first card.
+
+If the clone fails, report what it printed and stop. Do not install by another route.
+```
+
+- The agent runs it and reports. The last line of the output is the sentence to say next.
+- The output is a list of paths it changed, and `(already there)` for the ones it did not.
+- Nothing to configure after: no pointer to write, no ignore rule to add, no folder to create.
+
+## Install by hand
+
+The same two commands, typed by you at the repository root:
 
 ```bash
-npx skills add benxgao/flow-trail -g
+git clone -q --depth 1 https://github.com/benxgao/flow-trail ~/.flow-trail 2>/dev/null || git -C ~/.flow-trail pull -q
+bash ~/.flow-trail/scripts/install.sh
 ```
 
-- Installs for the current user, into the skills folder of each harness it recognises.
-- Nothing else to configure: the first card creates the folders it needs.
+- `--dry-run` prints every change and writes nothing.
+- `bash ~/.flow-trail/scripts/install.sh --dry-run <repo>` targets another repository.
+- Re-run it any time: a step already done is reported and skipped.
 
-## Then give it a way in
+## What it writes
 
-- Installed is not loaded. The skill fires on its description, so a session that never says
-  "plan this" never reaches for it.
-- The durable route is the pointer: the block at the top of the example's `AGENTS.md`
-  ([the example](../examples/login-refactor/AGENTS.md)). Every session reads that file.
-- The other route is the hook, which prints the `next:` line before the first message:
-  [hooks.md](hooks.md).
-- Without one of the two, an ordinary request — "add the IAM roles" — gets an answer, no card.
+| Path | What goes there | Left alone when |
+| --- | --- | --- |
+| `~/.agents/skills/flow-trail` | a link to `~/.flow-trail` | the link already points there |
+| `~/.claude/skills/`, plus one per harness here | the same link | that harness is missing |
+| `AGENTS.md` | the pointer, added as a section | it already names `flow-trail/README.md` |
+| `CLAUDE.md`, `GEMINI.md` | the same block | the repository has no such file |
+| `.gitignore` | `.agents/skills/`, `.claude/skills/` when present | the path is already ignored |
+| `flow-trail/README.md` | the folder note — template 4 of `SKILL.md` | the file exists |
+| `flow-trail/skips.md` | the four-cell header | the file exists |
 
-## Two folders cover most harnesses
+- The pointer is the part that makes the next session find the board; the skill alone does not.
+- The ignore lines are a guard: a skill's source is a dependency, not your project's code.
+- The skill's source in a commit is the failure this prevents; the installer names the undo
+  (`git rm -r --cached .agents/skills`) when it finds those files already tracked.
+- No lane directory is created: `backlog/` and the others appear when a card needs them.
 
-- `~/.agents/skills/` is read by Codex, Gemini CLI and DeepSeek Harness.
-- `~/.claude/skills/` is read by Claude Code and GitHub Copilot CLI.
-- Link the clone into both, and most of the sections below become unnecessary.
+## Check it worked
 
 ```bash
-git clone https://github.com/benxgao/flow-trail ~/src/flow-trail
-mkdir -p ~/.agents/skills ~/.claude/skills
-ln -s ~/src/flow-trail ~/.agents/skills/flow-trail
-ln -s ~/src/flow-trail ~/.claude/skills/flow-trail
+ls -l ~/.agents/skills/flow-trail        # a link to ~/.flow-trail
+grep -c 'flow-trail/README.md' AGENTS.md # 1
+ls flow-trail/                           # README.md  skips.md
 ```
 
-- Per project instead: the same link at `.agents/skills/flow-trail` or `.claude/skills/`.
-- `git pull` in the clone updates every harness at once.
+- The second run is the test: every line comes back `(already there)`.
+- A harness that does not list the skill reads a different folder — the table below.
 
-## Claude Code
+## Where a harness reads the skill
 
-```bash
-/plugin marketplace add benxgao/flow-trail
-/plugin install flow-trail@flow-trail
-```
+| Harness | Folder |
+| --- | --- |
+| Claude Code, GitHub Copilot CLI | `~/.claude/skills/` |
+| Codex | `~/.agents/skills/`, and the older `~/.codex/skills/` |
+| Gemini CLI | `~/.gemini/skills/`, alias `~/.agents/skills/` |
+| WorkBuddy | `~/.workbuddy-ai/skills/` |
+| CodeBuddy | `~/.codebuddy/skills/` |
+| DeepSeek Harness | `~/.dsh/skills/`, `~/.agents/skills/` |
+| Cursor, Windsurf, Roo Code, Qoder, Trae | none — `AGENTS.md` is the whole integration |
+| Aider | none — `read: AGENTS.md` in `.aider.conf.yml` |
+| Cline | `ln -s AGENTS.md .clinerules` |
 
-- `npx skills add` works here too, into `~/.claude/skills/`. Take one route, not both.
-- Only `npx skills add` has been run end to end; treat the `/plugin` pair as untested.
-- Hook: `.claude/settings.json`, matcher `startup|resume|clear|compact` — [hooks.md](hooks.md).
-- It reads `CLAUDE.md` at startup and not `AGENTS.md`: symlink one at the other.
-
-## Codex
-
-- Loads `~/.agents/skills/` per user and `.agents/skills/` per project.
-- `~/.codex/skills/` still loads; it is the older location, and `$skill-installer` writes there.
-- `/skills` lists what it found; `$flow-trail` calls it by name.
-- `AGENTS.md` at the repository root is read every session: copy the pointer from
-  [the example](../examples/login-refactor/AGENTS.md).
-
-## GitHub Copilot CLI
-
-- Skills: `.github/skills/flow-trail/SKILL.md` per project, or `~/.copilot/skills/`.
-- It reads `.claude/skills/` in both places too, so the link above is enough.
-- `/skills list` shows it, `/flow-trail` calls it, `/skills reload` after adding one.
-- Copilot Agent reads `AGENTS.md` as custom instructions, with no alias.
-
-## Gemini CLI
-
-- User: `~/.gemini/skills/` or its alias `~/.agents/skills/`, where the link above lands.
-- Project: `.gemini/skills/` or `.agents/skills/`; workspace skills need a trusted folder.
-- `/skills list`, `/skills reload`. Or let it fetch: `gemini skills install <repo url>`.
-- It reads `GEMINI.md`, not `AGENTS.md`: point that file at the pointer if you keep no hook.
-
-## Cursor, Windsurf, Roo Code, Qoder, Trae
-
-- All five read `AGENTS.md` at the repository root. There is nothing to install.
-- Copy the pointer from [the example](../examples/login-refactor/AGENTS.md) and it fires.
-- Trae desktop ships the switch off: turn on the AGENTS.md option in its rules settings.
-- Qoder also reads `AGENTS.local.md`, for rules you keep out of git.
-
-## Cline, and a harness with only its own rules file
-
-- Cline reads `.clinerules`. Make it the same file: `ln -s AGENTS.md .clinerules`.
-- Any other rules filename takes the same link, so one file stays the only copy.
-- The pointer names `flow-trail/` and the three columns; the skill does the rest.
-
-## Aider
-
-- `~/.aider.conf.yml`, or per project `.aider.conf.yml`:
-
-```yaml
-read: AGENTS.md
-```
-
-- Aider has no skills folder. The pointer plus the card files is the whole integration.
-
-## WorkBuddy / CodeBuddy
-
-- WorkBuddy lists skills from `~/.workbuddy-ai/skills/`. Link at user level: it is the folder
-  the app reads, and a project-level link is no substitute for the pointer above.
-- `npx skills add` ships a fixed list of harnesses, and WorkBuddy is not on it.
-- The CLI still writes `~/.agents/skills/flow-trail`, so nothing lands where WorkBuddy looks.
-- Link that copy into the folder WorkBuddy loads, then restart the app.
-
-```bash
-ln -s ~/.agents/skills/flow-trail ~/.workbuddy-ai/skills/flow-trail
-```
-
-- CodeBuddy is a separate product: `~/.codebuddy/skills/`, written by the CLI directly.
-- Hook file: `~/.workbuddy/settings.json`; per project, `.workbuddy/settings.json`.
-- The JSON for both is in [hooks.md](hooks.md).
-- Desktop app and CLI do not always read the same settings file.
-
-## DeepSeek Harness
-
-- Four places, earlier wins: `.dsh/skills/`, `.agents/skills/`, `~/.dsh/skills/`,
-  `~/.agents/skills/`.
+- Per project instead: the same link at `.agents/skills/flow-trail`; the ignore lines cover it.
 - Scan depth is one folder: `skills/flow-trail/SKILL.md` is found, a nested copy is not.
-- The `~/.agents/skills/` link above covers it; `~/.dsh/skills/flow-trail` works the same.
-- Restart the session after adding one; `/flow-trail` calls it by hand.
+- Windows needs WSL or Git Bash: the installer uses symlinks.
 
-## Optional: the hook
+## What the installer leaves to you
 
-Prints each `next:` line before the first message of a session: [hooks.md](hooks.md).
+| Harness | The rest |
+| --- | --- |
+| Claude Code | hook in `.claude/settings.json`; it reads `CLAUDE.md` |
+| WorkBuddy | restart the app after the first install |
+| Trae | turn on the AGENTS.md option in its rules settings |
+| Qoder | `AGENTS.local.md` for rules you keep out of git |
+| Claude Code plugin route | `/plugin marketplace add benxgao/flow-trail`, untested |
 
-- Without it, the skill fires when you say "plan this". The pointer is read only if the agent looks.
+## The hook, optional
 
-## Optional: the two scripts
+- A pointer is read only if the agent looks. The hook prints the board before the first message.
+- Test the payload first: `bash ~/.flow-trail/scripts/session-start.sh`
+- Silent outside a project that has a `flow-trail/` folder. Per harness: [hooks.md](hooks.md).
+
+## The two scripts, optional
 
 ```bash
-bash scripts/flow-trail-lint.sh flow-trail   # card shape, ten checks
-bash scripts/verify-outcome.sh --run         # re-run every closed card's Outcome commands
+bash ~/.flow-trail/scripts/flow-trail-lint.sh flow-trail   # card shape, ten checks
+bash ~/.flow-trail/scripts/verify-outcome.sh --run         # re-run closed cards' Outcomes
 ```
 
-- Both report and exit 1. Neither gates a commit, and no part of the skill calls them.
+- Both report and exit 1. Neither gates a commit, and the skill never calls them.
 
 ## The manifest
 
-`.claude-plugin/` holds the plugin manifest and nothing else. Delete it and the rest still works.
+`.claude-plugin/` holds the Claude Code plugin manifest and nothing else. Delete it and the rest
+still works; the installer above does not look at it.
+
+- `npx skills add benxgao/flow-trail -g` is the older route, tested end to end on Claude Code.
+- It writes `~/.agents/skills/` and `~/.claude/skills/` only, so run the installer after it.

@@ -5,11 +5,29 @@
 
 ## Unreleased
 
+## 0.2.0 — 2026-11-18
+
+One paste at the agent, and the installer writes what a user used to configure by hand.
+
 ### Added
+
+- `scripts/install.sh`: links the skill into every harness folder this machine has, appends the
+  `AGENTS.md` pointer, adds the ignore lines, creates `flow-trail/`. Idempotent, `--dry-run`.
+- `docs/install.md` opens with a paste block for an agent; `npx skills add` drops to the last
+  section, as the older route.
 
 ### Changed
 
+- README puts Get started above "Is it for you", and the install is one paste instead of a CLI
+  plus a per-harness caveat.
+- `docs/install.md`: twelve per-harness sections become two tables, the folder each reads and what
+  is left to the user.
+- `SKILL.md` "First card in a repository" writes only what the installer did not.
+
 ### Removed
+
+- The "WorkBuddy and editors that read only `AGENTS.md` need one more step" caveat: the installer
+  writes the link and the pointer.
 
 ## 0.1.2 — 2026-11-17
 

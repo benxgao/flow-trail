@@ -61,6 +61,8 @@ Never deliver a plan as a chat-only artifact, an in-conversation TODO list, or a
 - Create `flow-trail/README.md` from template 4.
 - Create `flow-trail/skips.md` with the four-cell header from `Not worth a card` below.
 - Append the pointer below to `AGENTS.md`, or `CLAUDE.md`, whichever the repo uses.
+- A board from `scripts/install.sh` already holds both files and the pointer: write only what is
+  missing, and say which of the three you had to add.
 
 ```markdown
 ## Work tracking
@@ -409,7 +411,7 @@ bash <this-skill>/scripts/verify-outcome.sh --run
 
 ## Files
 
-- `scripts/` — the linter, the hook payload, the outcome check, the prose check.
+- `scripts/` — the installer, the linter, the hook payload, the outcome check, the prose check.
 - `docs/` — `install.md` (per harness), `hooks.md` (wiring), `how-it-works.md` (mechanics),
   `writing.md` (house style).
 - `docs/faq.md` — the answers kept off the README: cost, merges, two people, a dead rule.

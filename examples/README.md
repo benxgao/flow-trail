@@ -46,8 +46,8 @@ before you ran anything.
 ## Trying it on your own project
 
 ```bash
-cp -r flow-trail AGENTS.md /path/to/your/project/
-cd /path/to/your/project && npx skills add benxgao/flow-trail -g
+cd /path/to/your/project && bash ~/.flow-trail/scripts/install.sh
 ```
 
-Then delete the three example cards and say "plan the thing you were about to do anyway".
+- It writes an empty board, not the example's three cards.
+- Then say "plan the thing you were about to do anyway".
