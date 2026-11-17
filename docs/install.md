@@ -9,6 +9,16 @@ npx skills add benxgao/flow-trail -g
 - Installs for the current user, into the skills folder of each harness it recognises.
 - Nothing else to configure: the first card creates the folders it needs.
 
+## Then give it a way in
+
+- Installed is not loaded. The skill fires on its description, so a session that never says
+  "plan this" never reaches for it.
+- The durable route is the pointer: the block at the top of the example's `AGENTS.md`
+  ([the example](../examples/login-refactor/AGENTS.md)). Every session reads that file.
+- The other route is the hook, which prints the `next:` line before the first message:
+  [hooks.md](hooks.md).
+- Without one of the two, an ordinary request — "add the IAM roles" — gets an answer, no card.
+
 ## Two folders cover most harnesses
 
 - `~/.agents/skills/` is read by Codex, Gemini CLI and DeepSeek Harness.
@@ -84,7 +94,8 @@ read: AGENTS.md
 
 ## WorkBuddy / CodeBuddy
 
-- WorkBuddy reads `~/.workbuddy-ai/skills/flow-trail/`; per project, `.workbuddy-ai/skills/`.
+- WorkBuddy lists skills from `~/.workbuddy-ai/skills/`. Link at user level: it is the folder
+  the app reads, and a project-level link is no substitute for the pointer above.
 - `npx skills add` ships a fixed list of harnesses, and WorkBuddy is not on it.
 - The CLI still writes `~/.agents/skills/flow-trail`, so nothing lands where WorkBuddy looks.
 - Link that copy into the folder WorkBuddy loads, then restart the app.

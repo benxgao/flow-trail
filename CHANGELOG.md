@@ -11,6 +11,20 @@
 
 ### Removed
 
+## 0.1.2 — 2026-11-17
+
+Installed is not loaded. A session that never names the board gets an answer, not a card.
+
+### Added
+
+- Install section "Then give it a way in": the pointer, the hook, and what happens with neither.
+- FAQ entry "Installed, and no card appeared?", with `ls flow-trail/` as the test.
+
+### Changed
+
+- README says the install does not make the board get used, and the first session needs a way in.
+- The WorkBuddy section links at user level: that is the folder the app lists.
+
 ## 0.1.1 — 2026-11-09
 
 Install routes and the places it runs, from the first week.

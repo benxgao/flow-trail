@@ -46,6 +46,9 @@ trying to do.
 - **Two people on one card?** The phases are the lock: one phase, one owner, both read the same row.
 - **What if the assistant ignores the board?** The hook prints the folder before the first
   message. A pointer nobody sees is not read.
+- **Installed, and no card appeared?** Nothing named a board: no "plan this", no pointer in
+  `AGENTS.md`, no `flow-trail/` folder to find. A skill fires on its description, not on install.
+  Test it with `ls flow-trail/`; empty means it never fired.
 
 ## Truth and cost
 

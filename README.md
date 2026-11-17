@@ -28,6 +28,8 @@ npx skills add benxgao/flow-trail -g
 
 - Measured on Claude Code. WorkBuddy and editors that read only `AGENTS.md` need one more step;
   [install](docs/install.md) names it.
+- Install puts the skill where a harness looks; it does not make the board get used. The first
+  session needs `plan this`, or the pointer in `AGENTS.md` — [install](docs/install.md) has it.
 
 Then say what you want, in your own words. No config, no folder to create:
 

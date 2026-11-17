@@ -10,7 +10,7 @@
       "name": "flow-trail",
       "source": "./",
       "description": "A card per piece of work: the conclusions, the evidence, and the state that dies at close.",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": {
         "name": "Ben Gao"
       },
