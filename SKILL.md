@@ -196,11 +196,14 @@ Detail behind these conclusions: [`findings.md`](./findings.md).
 ## Outcome
 
 <Fill at close, or at planning with the numbers marked `planned`. Three sentences at most, then the
-table. The Command column is not optional: it is the only copy left once `progress.md` is gone.>
+table. The Command column is not optional: it is the only copy left once `progress.md` is gone.
+`Verify` is the optional strict form: one assertion that exits 0 while the After value is still
+true. Without it the checker can only ask whether the After text appears in the output, which is
+why a row written in prose reports DRIFT on a card that is perfectly healthy.>
 
-| Metric | Before | After | Command |
-| --- | --- | --- | --- |
-| <what is counted> | <n> | <n> | `<command>` |
+| Metric | Before | After | Command | Verify |
+| --- | --- | --- | --- | --- |
+| <what is counted> | <n> | <n> | `<command that prints it>` | `<assertion; exit 0 means still true>` |
 
 ## Contract
 
@@ -250,26 +253,45 @@ almost never true.>
 
 Copy verbatim into `flow-trail/doing/<card>/findings.md`.
 
-- Holds what is too long for a table cell and too useful to lose.
-- Evidence only. Never state, never the decision itself.
+- A finding is something you did not know before, and that changes a decision. A number that only
+  proves the work happened is a receipt, and receipts go at the bottom.
+- Ordered by what it costs the next reader **not** to know. Not by date: the expensive one is
+  rarely the last one found.
+- Every entry names what cites it. One that nothing cites is the first candidate for retirement.
 - Empty is valid: a card that produced no evidence leaves the file empty.
 
 ````markdown
 # Findings: <card>
 
-Evidence collected while working. Conclusions live in [`README.md`](./README.md); state lives in
-`progress.md`. Anything here should be something a reader can point at.
+What this card learned. Conclusions live in [`README.md`](./README.md). Ordered by what it costs a
+reader **not** to know — not by when it was found. Each entry ends with what cites it, so a claim
+that has stopped mattering can be found and retired instead of outliving its usefulness.
 
-## Measurements
+## F1 — <what you learned, as a sentence about the world>
 
-| What | Command | Output |
+- **Saw** (<date>, <where>) — <the observation, and the command or path that produced it>
+- **Means** — <what it implies for the code or the plan>
+- **Cost if unknown** — <what the next person would do instead, and how long it would take>
+- **Cited by** — `<path:line>`, or `#F1` markers in the code, or `nothing yet`
+- **Status** — <fixed / kept / still open, one clause>
+
+## Reference — <a table someone will look up>, verified <date>
+
+<Only for a lookup table that outlives the card: a status map, a vocabulary, a set of limits. Where
+the two endpoints disagree, say so in a column rather than averaging them into one row.>
+
+| <what> | <value> | <where> |
 | --- | --- | --- |
-| <what was measured> | `<command>` | <the lines it printed, trimmed to what matters> |
+| <case> | <what happens> | `<path:line>` |
 
-## <topic>
+## Receipts
 
-<An excerpt, a response body, a stack trace, a table of cases, with the date or commit it came
-from, so a later reader can tell how stale it is. Delete the parts nobody would re-read.>
+<Numbers someone may re-check, with the command and the date. Name what you deleted and why, so the
+next author does not put it back.>
+
+| What | Command | Output | Date |
+| --- | --- | --- | --- |
+| <what was measured> | `<command>` | <the line it printed> | <date> |
 ````
 
 ## Template 4 — the folder note `flow-trail/README.md`
@@ -352,7 +374,8 @@ Where things go. Writing to the wrong file is how a card becomes unreadable:
 | --- | --- | --- |
 | a choice, and what lost | `README ## Decisions` | the code never shows the rejected option |
 | a number, and its command | `Baseline` → `Outcome` | a number without a command is a story |
-| output, excerpt, trace, long table | `findings.md` | the README is a page, evidence is not |
+| a finding, what it costs, what cites it | `findings.md ## F<n>` | the reader decides in one line whether to keep reading |
+| a number that only proves work happened | `findings.md ## Receipts` | it answers no question the next reader has |
 | state, next action, what you tried | `progress.md` | all of it expires |
 
 - `code` and `verified` are separate facts. Never write `[x]` because the code compiles.
@@ -364,7 +387,9 @@ Where things go. Writing to the wrong file is how a card becomes unreadable:
 
 Closing is a distillation, not a tidy-up. Three moves:
 
-1. Evidence out of the log. Outputs, responses, numbers with context — into `findings.md`, dated.
+1. Evidence out of the log. Each finding becomes an `F` entry: what was seen, what it implies, what
+   it costs to not know, and what cites it. Numbers that only proved work happened go under
+   `## Receipts`, dated.
 2. Conclusions out of the log.
    - `## Outcome` carries Before, After and the Command.
    - Every decision has its row and its rejected alternative.
@@ -390,9 +415,11 @@ Closing is a distillation, not a tidy-up. Three moves:
 bash <this-skill>/scripts/flow-trail-lint.sh flow-trail
 ```
 
-- Ten checks: a card in `doing/` has both files, no `progress.md` in `done/`, six headings.
+- Thirteen checks: a card in `doing/` has both files, no `progress.md` in `done/`, six headings.
 - And: no surviving checkbox, a backlog card carries no `progress.md`, skip rows have four cells.
-- And: findings is linked from its README.
+- And: findings is linked from its README, every findings heading is `## F<n> —` plus an optional
+  `## Reference` and `## Receipts`, each `F` entry carries `Cost if unknown` and `Cited by`.
+- And: no `Enforced by` cell points at `progress.md`, which is deleted at close.
 - Three warnings: closed README 120 lines, findings 200, more than one card in `doing/`.
 - Reports, exits 1, gates nothing. No skill directory? Skip it.
 - Templates in this file: `bash <this-skill>/scripts/template-lint.sh`.
@@ -405,7 +432,10 @@ bash <this-skill>/scripts/verify-outcome.sh --run
 ```
 
 - Re-runs every command in the closed cards' `## Outcome` tables.
-- Reports `ok`, `DRIFT`, `FAIL`; exits 1 on drift.
+- Reports `ok`, `LOOSE`, `skip`, `DRIFT`, `FAIL`; exits 1 on a strict drift or a command failure.
+- A row with a `Verify` assertion is strict: exit 0 is `ok`, anything else is `DRIFT`.
+- A row without one is `loose`: it only asks whether the After text appears in the output. A `loose`
+  DRIFT asks you to write the assertion, not to doubt the card.
 - Without `--run` it only lists what it would run.
 - This is why the Command column exists.
 

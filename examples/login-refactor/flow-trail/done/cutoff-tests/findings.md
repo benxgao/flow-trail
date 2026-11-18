@@ -1,22 +1,29 @@
 # Findings: cutoff-tests
 
-Evidence collected while working. Conclusions live in [`README.md`](./README.md).
+What this card learned. Conclusions live in [`README.md`](./README.md). Ordered by what it costs a
+reader **not** to know — not by when it was found. Each entry ends with what cites it.
 
-## Measurements
+## F1 — The signing path keys off the secret's presence, so the window never closes by itself
 
-| What | Command | Output |
-| --- | --- | --- |
-| Cases on the boundary | `cd app && node --test --test-name-pattern cutoff` | `# pass 3` |
-| Switches in the signing path | `grep -c CUTOFF app/src/session.js` | `2` |
+- **Saw** (2026-11-04, before the change) — the algorithm was chosen by a lookup, not a date:
 
-## The window before the change
+  ```js
+  export function algorithmFor(issuedAt) {
+    return process.env.JWT_SECRET ? "HS256" : "RS256";
+  }
+  ```
 
-The signing path as it stood on the last commit that used it:
+- **Means** — a secret that exists is a secret that exists forever; a date is the part that ends.
+  There was no date anywhere in the path: `grep -c CUTOFF` returned 0.
+- **Cost if unknown** — the next person reads "we migrated to RS256" from the title, sees HS256
+  still signing, and concludes the migration failed rather than that it was never finished.
+- **Cited by** — `app/src/session.js` (the two cutoff switches); `app/test/session.test.js`, the
+  boundary cases.
+- **Status** — fixed; the date decides now, and the secret only decides inside the window.
 
-```js
-export function algorithmFor(issuedAt) {
-  return process.env.JWT_SECRET ? "HS256" : "RS256";
-}
-```
+## Receipts
 
-A secret that exists is a secret that exists forever. A date is the part that ends.
+| What | Command | Output | Date |
+| --- | --- | --- | --- |
+| Cases on the boundary | `cd app && node --test --test-name-pattern cutoff` | `# pass 3` | 2026-11-04 |
+| Switches in the signing path | `grep -c CUTOFF app/src/session.js` | `2` (was `0`) | 2026-11-04 |

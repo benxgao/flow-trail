@@ -49,7 +49,7 @@ flow-trail/
 | File | Holds | Kind | Dies when |
 | --- | --- | --- | --- |
 | `README.md` | Six sections of conclusions | what we know | never |
-| `findings.md` | Measurements, outputs, excerpts | what we saw | never, capped ~200 |
+| `findings.md` | Numbered findings, then receipts | what we saw, and what it cost not to know | never, capped ~200 |
 | `progress.md` | Status, phases, baseline, log | where we are | `git rm` at close |
 
 - The split is by role, not by topic.
@@ -62,7 +62,8 @@ Writing to the wrong file is how a card becomes unreadable:
 | --- | --- |
 | a choice, and what lost | `README ## Decisions` |
 | a number, and its command | `Baseline` → `## Outcome` |
-| output, excerpt, trace, long table | `findings.md` |
+| a finding, what it costs, what cites it | `findings.md ## F<n>` |
+| a number that only proves work happened | `findings.md ## Receipts` |
 | state, next action, what you tried | `progress.md` |
 
 ## The six headings
@@ -116,7 +117,9 @@ Writing to the wrong file is how a card becomes unreadable:
 
 Three moves, in order:
 
-1. Evidence out of the log — outputs, numbers with context — into `findings.md`, dated.
+1. Evidence out of the log — each finding becomes an `F` entry with what it implies, what it costs
+   to not know, and what cites it. Numbers that only proved work happened go under `## Receipts`,
+   dated, where they can be deleted without losing anything.
 2. Conclusions out of the log — Outcome with command, decisions with rejections, Residual.
 3. Delete and move:
 
@@ -135,9 +138,13 @@ git mv flow-trail/doing/<card> flow-trail/done/<card>
 bash <this-skill>/scripts/flow-trail-lint.sh flow-trail
 ```
 
-- Seven error checks: a card in `doing/` has both files; a card in `backlog/` has one.
+- Ten error checks: a card in `doing/` has both files; a card in `backlog/` has one.
 - And: no `progress.md` in `done/`; six headings; no checkbox; findings linked from its README.
 - And: skip rows carry four cells.
+- And: findings headings are `## F<n> —`, `## Reference` or `## Receipts`; a `## Measurements`
+  section is a receipt wearing a finding's name.
+- And: each `F` entry carries `Cost if unknown` and `Cited by`, counted per file.
+- And: a closed README never points at `progress.md`, which is deleted at close.
 - Three warnings: closed README over 120 lines, findings over 200, more than one card in `doing/`.
 - It reports, exits 1 on error, gates nothing. No CI job, on purpose.
 
@@ -154,6 +161,14 @@ doing: flow-trail/doing/parked — waiting on a deploy [last 2026-09-01, stale 6
 ```
 
 - A prompt to look, not a verdict. Deleting a parked card stays a decision.
+- One more line names the three most recently closed cards:
+
+```
+done: api-optimization, cutoff-tests — closed cards; open one before re-deciding in its area
+```
+
+- Without it a `done/` card has no automatic surface at all: the `doing/` loop skips it, so an agent
+  only ever finds the archive by grepping for something it does not know exists.
 
 ## Checking that the record is still true
 
@@ -163,9 +178,12 @@ bash <this-skill>/scripts/verify-outcome.sh --run    # run and compare
 ```
 
 - Walks every closed card's `## Outcome` table and runs the recorded command.
-- `ok` when the recorded After value appears in the output.
-- `DRIFT` when it does not. `FAIL` when the command errors. Exit 1 on drift.
-- Nothing is modified, and commands only run with `--run`.
+- `ok` when a `Verify` assertion exits 0. `DRIFT` when it does not. `FAIL` when the command errors.
+- A row with no `Verify` cell is `LOOSE`: the recorded After text only has to appear in the output.
+  Prose never does, so `LOOSE` never fails the run — it asks for an assertion instead.
+- `manual` in the Verify cell skips the row: a deployed stage or a secret only a person has.
+- Exit 1 only on a strict drift or a command failure. Nothing is modified, and commands only run
+  with `--run`.
 
 ## Reading it back
 

@@ -55,4 +55,20 @@ while IFS= read -r dir; do
   [ "$shown" -ge 4 ] && break
 done < <(find "$ROOT/doing" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 
+# Closed cards are the half of the board a session never otherwise learns about.
+# Names only: the hook prompts a look, it does not summarise.
+recent=""
+closed=0
+while IFS= read -r dir; do
+  [ -n "$dir" ] || continue
+  name=$(basename "$dir")
+  recent="${recent:+$recent, }$name"
+  closed=$((closed + 1))
+  [ "$closed" -ge 3 ] && break
+done < <(ls -dt "$ROOT"/done/*/ 2>/dev/null)
+
+if [ -n "$recent" ]; then
+  echo "done: $recent — closed cards; open one before re-deciding in its area"
+fi
+
 exit 0

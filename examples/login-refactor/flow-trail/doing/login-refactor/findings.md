@@ -1,61 +1,68 @@
 # Findings: login-refactor
 
-Evidence collected while working. Conclusions live in [`README.md`](./README.md); state lives in
-`progress.md`. Anything here should be something a reader can point at.
+What this card learned so far. Conclusions live in [`README.md`](./README.md). Ordered by what it
+costs a reader **not** to know — not by when it was found. Each entry ends with what cites it.
 
-## Measurements
+## F1 — The cutoff test fails because the ttl is ignored, not because the date is wrong
 
-| What | Command | Output |
-| --- | --- | --- |
-| Tests, before P1 | `cd app && npm test` | `# tests 2`, `# pass 2` |
-| Tests, after P2.2 was written | `cd app && npm test` | `# tests 5`, `# pass 4`, `# fail 1` |
-| Cutoff cases only | `node --test --test-name-pattern cutoff` | `# pass 3`, `# fail 0` |
+- **Saw** (2026-11-05, `cd app && npm test`) — five tests, one failure, verbatim:
 
-The one failure, verbatim, 2026-11-05:
+  ```
+  not ok 5 - a caller-supplied ttl wins over the default
+    expected: 3600
+    actual: 604800
+  ```
 
-```
-not ok 5 - a caller-supplied ttl wins over the default
-  expected: 3600
-  actual: 604800
-```
+- **Means** — the signing path hard-codes the week:
 
-## Why the secret lost
+  ```js
+  export function algorithmFor() {
+    return "HS256";
+  }
 
-The rejected option was: enable the HS256 path whenever the signing secret is present in the
-environment.
+  export function createSession({ user, issuedAt }) {
+    const iat = Math.floor(issuedAt / 1000);
+    return { sub: user.id, alg: "HS256", iat, exp: iat + WEEK };
+  }
+  ```
 
-- It reads as a migration and behaves as a switch nobody owns.
-- The secret is present in every environment today, including the two nobody redeployed.
-- So the window opens everywhere at once, and it closes when the last person remembers to unset a
-  variable.
-- That is unbounded: no date, no test, and no way to tell a finished migration from a forgotten one.
-- The cutoff date fails in the other direction, which is the useful direction: a token issued after
-  2026-01-01 is RS256 even if the secret is still set. The window closes whether or not anyone acts.
+  So the algorithm is not the only thing the refactor has to move: the expiry is written into the
+  constructor, and the test that proves the cutoff works cannot pass until it is a parameter.
+- **Cost if unknown** — the failure reads as "the cutoff logic is wrong", and a day goes into the
+  date comparison while the real defect is an argument that never reaches the function.
+- **Cited by** — `app/test/session.test.js`, case 5.
+- **Status** — P2.2, being written.
 
-## The session service before P1
+## F2 — The signing secret is present in every environment today
 
-The excerpt the Baseline table in `progress.md` was measured against. There was no choice yet; the
-algorithm was written into the function.
+- **Saw** (2026-11-05) — the secret is set in all environments, including the two that nobody
+  redeployed since the change.
+- **Means** — "enable HS256 whenever the secret is present" is not a migration, it is a switch
+  that turns itself on everywhere at once.
+- **Cost if unknown** — the window opens in environments nobody watches, and it closes only when
+  the last person remembers to unset a variable. No date, no test, and no way to tell a finished
+  migration from a forgotten one.
+- **Cited by** — `README ## Decisions`, the row rejecting the env-var switch.
+- **Status** — drove the choice of a cutoff date over a flag.
 
-```js
-export function algorithmFor() {
-  return "HS256";
-}
+## F3 — Clock skew is unmeasured
 
-export function createSession({ user, issuedAt }) {
-  const iat = Math.floor(issuedAt / 1000);
-  return { sub: user.id, alg: "HS256", iat, exp: iat + WEEK };
-}
-```
+- **Saw** (2026-11-05) — nothing. No host has been tested with a skewed clock.
+- **Means** — a host 30 seconds slow issues a token stamped before midnight on the cutoff date;
+  that token takes the HS256 path.
+- **Cost if unknown** — whether that matters depends on the verifier's tolerance, so the answer
+  would be invented by whoever reads the card next instead of measured. This is the first thing to
+  check if a post-cutoff token is ever accepted.
+- **Cited by** — nothing yet. No case exercises it.
+- **Status** — open.
 
-## What the window costs
+## Receipts
 
-- A token issued before the cutoff stays verifiable with a shared secret for seven days after issue.
-- After the cutoff the HS256 path signs nothing new, so the secret stops being a way to mint tokens.
-- The cost is the seven days: revoking the old secret early invalidates every token still inside it.
+| What | Command | Output | Date |
+| --- | --- | --- | --- |
+| Tests, before P1 | `cd app && npm test` | `# tests 2`, `# pass 2` | 2026-11-05 |
+| Tests, after P2.2 | `cd app && npm test` | `# tests 5`, `# pass 4`, `# fail 1` | 2026-11-05 |
+| Cutoff cases only | `node --test --test-name-pattern cutoff` | `# pass 3`, `# fail 0` | 2026-11-05 |
 
-## Clock skew, unmeasured
-
-- A host whose clock runs 30 seconds slow issues a token stamped before midnight on 2025-12-31.
-- That token takes the HS256 path. Whether that matters depends on the tolerance of the verifier.
-- Nobody has measured it. There is no case for it.
+The middle row is the failure quoted in F1. It stays until P2.3 turns it green; then it becomes the
+first row of the closed card's table.

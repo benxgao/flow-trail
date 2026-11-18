@@ -9,10 +9,10 @@ Detail behind these conclusions: [`findings.md`](./findings.md).
 
 The switch is a date, not a secret. The boundary runs on the same runner as everything else.
 
-| Metric | Before | After | Command |
-| --- | --- | --- | --- |
-| Cases in the suite | 2 | `5` | `grep -c '^test(' app/test/session.test.js` |
-| Boundary cases | 0 | `# pass 3` | `cd app && node --test --test-name-pattern cutoff` |
+| Metric | Before | After | Command | Verify |
+| --- | --- | --- | --- | --- |
+| Cases in the suite | 2 | `5` | `grep -c '^test(' app/test/session.test.js` | `[ "$(grep -c '^test(' app/test/session.test.js)" -eq 5 ]` |
+| Boundary cases | 0 | `# pass 3` | `cd app && node --test --test-name-pattern cutoff` | `cd app && node --test --test-name-pattern cutoff >/dev/null 2>&1` |
 
 ## Contract
 

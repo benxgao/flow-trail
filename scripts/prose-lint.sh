@@ -38,6 +38,10 @@ findings=$(awk -v max="$MAX" -v filler="$FILLER" '
   }
   fence { next }
   index($0, "prose-lint:ignore") { next }
+  # A table row is one physical line: markdown cannot wrap a cell. The cap is a
+  # prose cap, so rows are exempt the same way code fences are. Table rows were
+  # added when Outcome grew a fifth column and every row went past 100.
+  /^[[:space:]]*\|/ { next }
   length($0) > max {
     printf "%s:%d: %d chars (max %d)\n", FILENAME, FNR, length($0), max
     n2++

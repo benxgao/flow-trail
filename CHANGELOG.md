@@ -5,6 +5,41 @@
 
 ## Unreleased
 
+## 0.2.1 — 2026-11-18
+
+Findings were logs. Twenty rows saying the suite passed 128 times, and the one entry that mattered
+last. A finding is now numbered, priced, and cited.
+
+### Added
+
+- `## Outcome` takes an optional fifth column, `Verify`: one assertion that exits 0 while the After
+  value is still true. `verify-outcome.sh` runs it and reports `ok` or `DRIFT`.
+- Three linter checks: every findings heading is `## F<n> —` (`## Reference` and `## Receipts`
+  allowed); each `F` entry carries `Cost if unknown` and `Cited by`; a closed README never points at
+  `progress.md`.
+- `session-start.sh` names the three most recently closed cards. Before this, a `done/` card had no
+  automatic surface at all — the `doing/` loop skips it, so an agent only found the archive by
+  grepping for something it did not know existed.
+
+### Changed
+
+- Template 3 is findings-first: `F1..Fn`, ordered by cost to the reader, not by date. Each has
+  Saw / Means / Cost if unknown / Cited by / Status, then optional `## Reference`, `## Receipts`.
+- `verify-outcome.sh` separates strict from loose. A row without a `Verify` cell is `LOOSE`: the
+  recorded text only has to appear in the output, so prose never matches and never fails the run.
+  The previous version reported 12 of 12 rows as drifted on a healthy card, which teaches people to
+  ignore a checker — that is worse than having none.
+- `verify-outcome.sh` accepts `manual` in the `Verify` cell for a check that needs a deployed stage
+  or a secret, and skips it rather than failing on every run.
+- The `Outcome` template requires the command alone in the Command cell. An Arrow-and-expected-value
+  form (`grep … → 1`) is what `bash -c` cannot run, and is what made two rows exit 2.
+- `docs/files.svg`, `docs/how-it-works.md` and `docs/faq.md` show the numbered structure.
+
+### Removed
+
+- `## Measurements` as a findings heading, and with it the template's licence to keep a progress bar
+  after the progress is gone. Those rows are `## Receipts` now, or deleted.
+
 ## 0.2.0 — 2026-11-18
 
 One paste at the agent, and the installer writes what a user used to configure by hand.

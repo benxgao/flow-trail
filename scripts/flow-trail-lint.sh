@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# flow-trail lint — ten checks over a flow-trail/ root.
+# flow-trail lint — thirteen checks over a flow-trail/ root.
 #
 #   bash flow-trail-lint.sh [root]      # default: flow-trail
 #
@@ -35,10 +35,25 @@ has_six_headings() {
   return 0
 }
 
+# Findings are findings: F-numbered, each with what it costs and what cites it.
+# A section called "Measurements" is a receipt, and receipts belong under ## Receipts.
+check_findings() {
+  local dir="$1" f="$1/findings.md" bad nf nc ncite
+  [ -f "$f" ] || return 0
+  bad=$(grep -E '^## ' "$f" | grep -vE '^## F[0-9]+ — |^## Reference|^## Receipts' | head -1)
+  [ -z "$bad" ] || err "E8 findings heading is not '## F<n> — ' / Reference / Receipts: $dir -> $bad"
+  nf=$(grep -cE '^## F[0-9]+ — ' "$f" || true)
+  nc=$(grep -c '\*\*Cost if unknown\*\*' "$f" || true)
+  ncite=$(grep -c '\*\*Cited by\*\*' "$f" || true)
+  [ "$nc" -eq "$nf" ] || err "E9 $nf finding(s) but $nc 'Cost if unknown' line(s): $dir"
+  [ "$ncite" -eq "$nf" ] || err "E9 $nf finding(s) but $ncite 'Cited by' line(s): $dir"
+}
+
 # --- doing: README + progress ----------------------------------------------
 while IFS= read -r dir; do
   [ -f "$dir/README.md" ] || err "E1 card in doing has no README.md: $dir"
   [ -f "$dir/progress.md" ] || err "E1 card in doing has no progress.md: $dir"
+  check_findings "$dir"
 done < <(find "$ROOT/doing" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 
 # --- backlog: one page, no state -------------------------------------------
@@ -70,6 +85,11 @@ while IFS= read -r dir; do
     flines=$(wc -l < "$dir/findings.md" | tr -d ' ')
     [ "$flines" -gt "$FINDINGS_CAP" ] &&
       warn "W2 findings.md is $flines lines (cap $FINDINGS_CAP): $dir"
+  fi
+  check_findings "$dir"
+  # progress.md is deleted at close, so a pointer to it enforces nothing.
+  if grep -q 'progress\.md' "$dir/README.md"; then
+    err "E10 closed README points at progress.md, which no longer exists: $dir"
   fi
 done < <(find "$ROOT/done" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 

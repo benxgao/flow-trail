@@ -27,7 +27,13 @@ trying to do.
 - **How long can a card be?** Closed README 120 lines, findings 200. The linter warns, never
   blocks. `progress.md` is deleted, so its length costs nothing.
 - **What if a number stops being true?** `verify-outcome.sh --run` re-runs every `## Outcome`
-  command and reports drift.
+  command. A row with a `Verify` assertion is strict; one without is `LOOSE` and never fails the
+  run, because prose cannot match output and a checker that always fails gets ignored.
+- **Why do findings have numbers?** Because `Cited by` needs an address. `#F1` in a test comment
+  turns "this evidence was worth keeping" into a grep, and a finding nobody cites is the first
+  entry to retire.
+- **Why is `## Measurements` gone?** It was a log. A number that only proves the work happened
+  belongs under `## Receipts`, where deleting it costs nothing.
 - **What if a decision turns out wrong?** Add a row. The old row keeps its date and its rejected
   option.
 - **Does it clutter the repo?** One to three files per card, two once closed. A closed card is a
@@ -61,8 +67,8 @@ trying to do.
 - **What does a card cost?** One baseline measurement before the first edit, and one `git mv` per
   column change.
 - **Do I need all the scripts?** No. They report; none of them gates anything.
-- **Can I use it in a repository with no tests?** Yes. `findings.md` holds a command and its
-  output, and a command that prints nothing is still evidence.
+- **Can I use it in a repository with no tests?** Yes. A finding is what you saw and what it costs
+  not to know; a command that prints nothing is still evidence, and so is an absence.
 
 ## Where it runs
 
