@@ -5,6 +5,19 @@
 
 ## Unreleased
 
+## 0.7.1 — 2026-11-19
+
+The one command 0.7.0 opens with pointed at a branch this repository does not have. The paste URL
+said `main`, the default is `master`, so the first thing a new reader runs returned 404 — and the
+README for 0.7.0 was published with it.
+
+### Changed
+
+- README, `docs/install.md`, `docs/upgrade.md`: the bootstrap URL names `HEAD`, which resolves to
+  whatever the default branch is called.
+- `scripts/bootstrap.sh`: `--main` asks the remote for its default branch with `ls-remote --symref`
+  instead of assuming `main`, and stops with a message when it cannot read one.
+
 ## 0.7.0 — 2026-11-19
 
 An upgrade was the one path with no page, and the one command that could not be checked.

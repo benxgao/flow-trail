@@ -11,7 +11,7 @@ Paste this into the agent, with the repository open:
 Install flow-trail in this repository.
 
 1. Run, from the repository root:
-   bash -c "$(curl -fsSL https://raw.githubusercontent.com/benxgao/flow-trail/main/scripts/bootstrap.sh)"
+   bash -c "$(curl -fsSL https://raw.githubusercontent.com/benxgao/flow-trail/HEAD/scripts/bootstrap.sh)"
 2. Show me the whole output.
 3. Do not edit AGENTS.md, .gitignore or flow-trail/ yourself: the installer writes those.
 4. Tell me the version its last line reports, and the sentence for opening the first card.
@@ -28,11 +28,11 @@ If it cannot reach the remote, report what it printed and stop. Do not install b
 The same command, typed by you at the repository root:
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/benxgao/flow-trail/main/scripts/bootstrap.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/benxgao/flow-trail/HEAD/scripts/bootstrap.sh)"
 ```
 
 - `--dry-run` prints the release it found, the owner it would move, and writes nothing.
-- `--main` follows the tip of main instead of the newest tag.
+- `--main` follows the tip of the default branch instead of the newest tag.
 - Re-run it any time: it is also the upgrade. Already current comes back `already <version>`, with
   the links and the board re-checked. [upgrade.md](upgrade.md) has the long version.
 - The flags need a file rather than a pipe: `git clone -q --depth 1

@@ -61,6 +61,13 @@ newest_tag() {
     awk -F/ '{print $NF}' | grep -E '^v[0-9]+\.' | sort -V | tail -1
 }
 
+# The branch a raw URL's HEAD resolves to. Named rather than assumed: this repository's
+# default is not `main`, and a fetch of a branch that does not exist fails the run.
+default_branch() {
+  git ls-remote --symref "$URL" HEAD 2>/dev/null |
+    awk '/^ref:/ { sub("refs/heads/", "", $2); print $2; exit }'
+}
+
 # 1. Who serves this repository's skill, and which version is on disk.
 PROJECT_SKILL="$ROOT/.agents/skills/flow-trail"
 [ -e "$PROJECT_SKILL" ] || PROJECT_SKILL="$ROOT/.claude/skills/flow-trail"
@@ -93,11 +100,17 @@ else
   OWNER="none: nothing installed in this repository"
 fi
 
-# 2. The newest release, unless the tip of main was asked for.
+# 2. The newest release, unless the tip of the default branch was asked for.
 TAG=""
 TARGET=""
+BRANCH=""
 if [ "$MAIN" -eq 1 ]; then
-  TARGET="main (unreleased)"
+  BRANCH=$(default_branch)
+  if [ -z "$BRANCH" ]; then
+    printf 'cannot read the default branch of %s\n' "$URL" >&2
+    exit 2
+  fi
+  TARGET="$BRANCH (tip)"
 else
   TAG=$(newest_tag)
   if [ -z "$TAG" ]; then
@@ -131,7 +144,7 @@ printf '  owner      %s\n' "$OWNER"
 printf '  action     %s\n' "$([ "$AHEAD" -eq 1 ] && printf 'none: ahead of the newest tag' || printf '%s' "$ACTION")"
 
 if [ "$DRY" -eq 1 ] || [ "$AHEAD" -eq 1 ]; then
-  [ "$AHEAD" -eq 1 ] && printf '\nNewer than the newest tag, so nothing was moved. --main follows the tip.\n'
+  [ "$AHEAD" -eq 1 ] && printf '\nNewer than the newest tag, so nothing was moved. --main follows the tip of the default branch.\n'
   [ "$DRY" -eq 1 ] && printf '\nNothing written. Run it again without --dry-run.\n'
   exit 0
 fi
@@ -164,7 +177,7 @@ case "$OWNER" in
       fi
     else
       if [ "$MAIN" -eq 1 ]; then
-        git -C "$DEST" fetch -q --depth 1 origin main &&
+        git -C "$DEST" fetch -q --depth 1 origin "$BRANCH" &&
           git -C "$DEST" -c advice.detachedHead=false checkout -q -f --detach FETCH_HEAD || exit 1
       else
         git -C "$DEST" fetch -q --tags --depth 1 origin "refs/tags/$TAG:refs/tags/$TAG" ||
@@ -192,7 +205,7 @@ INSTALLED=$(version_at "$READ_AT")
 
 if [ "$MAIN" -eq 1 ]; then
   printf '\n  installed  %s\n' "${INSTALLED:-unknown}"
-  printf '  verdict    main, at whatever the tip holds\n'
+  printf '  verdict    %s, at whatever the tip holds\n' "$BRANCH"
   exit 0
 fi
 if [ "$INSTALLED" = "$TARGET" ]; then

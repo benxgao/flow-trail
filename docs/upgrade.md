@@ -6,7 +6,7 @@ repository open:
 
 ```text
 Upgrade flow-trail in this repository:
-  bash -c "$(curl -fsSL https://raw.githubusercontent.com/benxgao/flow-trail/main/scripts/bootstrap.sh)"
+  bash -c "$(curl -fsSL https://raw.githubusercontent.com/benxgao/flow-trail/HEAD/scripts/bootstrap.sh)"
 Show me the whole output, and the two lines it ends with: installed and verdict.
 Do not edit AGENTS.md, .gitignore or flow-trail/ yourself.
 Then tell me the release I am on, and the sentence that opens the next card.
@@ -16,8 +16,8 @@ Then tell me the release I am on, and the sentence that opens the next card.
   only the owner it finds: `npx skills update` for a copy, a checkout plus `install.sh` for a link.
 - The last two lines are read back from the manifest. A download that did not land says so instead
   of ending on `up to date`.
-- `--dry-run` first prints that plan and writes nothing. `--main` follows the tip of main instead
-  of the newest tag.
+- `--dry-run` first prints that plan and writes nothing. `--main` follows the tip of the default
+  branch instead of the newest tag.
 - Read it before running it: one file, `git` and the installer, nothing else. It fetches from the
   default branch so its logic is never a stale copy — the failure this page is about.
 

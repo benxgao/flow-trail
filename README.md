@@ -16,7 +16,7 @@ Paste this at your agent, with the repository open:
 
 ```text
 Install flow-trail in this repository:
-  bash -c "$(curl -fsSL https://raw.githubusercontent.com/benxgao/flow-trail/main/scripts/bootstrap.sh)"
+  bash -c "$(curl -fsSL https://raw.githubusercontent.com/benxgao/flow-trail/HEAD/scripts/bootstrap.sh)"
 Show me the output, and the version it prints last.
 Do not edit AGENTS.md, .gitignore or flow-trail/ yourself.
 Then tell me the sentence that opens the first card.
