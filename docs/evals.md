@@ -94,6 +94,19 @@ A silent finding is either useless or unfindable, and the log cannot say which. 
 The two outcomes get opposite repairs. Unfindable means the heading, the wording or the `Cited by`
 anchor is wrong. Dead weight means deleting the finding, which makes the next card better.
 
+## The denominator is a proxy
+
+`area` counts commits touching the files a card cites, since the card was written. It is the
+cheapest denominator available: the citations already name the files, so no instrumentation is
+needed.
+
+It has one hole, and the table will show it. A finding can be used while working somewhere else —
+someone changing the retry delay applies what the queue card said. So `area 0` with `used 2/2` is
+possible and not a contradiction; it means the reuse happened outside the files the card pointed at.
+
+Read `area` as "was anyone working in this neighbourhood", not as a strict rate denominator. When it
+is 0 for months, the card is not wrong — the neighbourhood moved.
+
 ## The control: plant a wrong finding
 
 Every other number here is self-reported by the same agent that did the work. A log that only

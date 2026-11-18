@@ -96,6 +96,26 @@ usage_for() {
   ' "$USAGE"
 }
 
+# The files a card cites are the files it is about. Commits touching them after the
+# card existed are the opportunities it had to be used — a denominator that costs
+# nothing, because the citations are already written.
+area_files() {
+  grep '\*\*Cited by\*\*' "$1/findings.md" 2>/dev/null |
+    grep -o '`[^`]*`' | tr -d '`' | grep ' :: ' | sed 's/ :: .*//' | grep '/' | sort -u
+}
+
+area_commits() {
+  local dir proj birth files
+  dir=$(cd "$1" && pwd)
+  proj=$(cd "$(dirname "$ROOT")" && pwd)
+  files=$(area_files "$dir")
+  [ -n "$files" ] || { printf '%s' '-'; return 0; }
+  birth=$(git -C "$proj" log --diff-filter=A --format=%cs -- "$dir" 2>/dev/null | tail -1)
+  [ -n "$birth" ] || { printf '%s' '-'; return 0; }
+  # shellcheck disable=SC2086
+  git -C "$proj" log --since="$birth" --format=%h -- $files 2>/dev/null | wc -l | tr -d ' '
+}
+
 # Findings with no event yet — the list a reader acts on.
 unused_findings() {
   local dir="$1" used="$2" id
@@ -186,13 +206,34 @@ printf '%d with a Verify assertion, %d manual.\n' "$t_strict" "$t_manual"
 if [ -f "$USAGE" ]; then
   events=$(grep -cE '^\| 20[0-9][0-9]-' "$USAGE" || true)
   if [ "$events" -eq 0 ]; then
-    printf '\nusage: 0 events. No later task has used a finding yet — that zero is the finding.\n'
+    # Zero is only a result if something could have been retrieved. Count the commits
+    # that touched the files these cards cite, so the reader can tell "no opportunity
+    # yet" from "opportunities went by and nothing was recorded".
+    area_total=0
+    for column in doing done; do
+      for dir in "$ROOT/$column"/*; do
+        [ -f "$dir/findings.md" ] || continue
+        a=$(area_commits "$dir")
+        case "$a" in '' | '-') continue ;; esac
+        area_total=$((area_total + a))
+      done
+    done
+    if [ "$area_total" -eq 0 ]; then
+      printf '\nusage: 0 events. Nothing has touched the files these cards cite, so nothing was\n'
+      printf 'available to retrieve yet. This is the normal state in the first week.\n'
+    else
+      printf '\nusage: 0 events across %d commit(s) that touched the files these cards cite.\n' "$area_total"
+      printf 'The chance existed; the recording did not happen.\n'
+    fi
+    printf 'The record still has something to show: run with --verify to re-check every Outcome row.\n'
     printf 'Record one with: bash %s/flow-trail-usage.sh --add <card> <F#> applied "<what changed>" --ref commit:<sha>\n' \
       "$SCRIPT_DIR"
   else
     printf '\nusage — %d event(s)\n' "$events"
-    printf '%-26s %5s %7s %8s %10s %-11s %s\n' card finds used applied falsified 'first use' via
-    printf '%-26s %5s %7s %8s %10s %-11s %s\n' -------------------------- ----- ----- -------- ---------- ----------- ---
+    printf '%-26s %5s %7s %5s %8s %10s %-11s %s\n' \
+      card finds used area applied falsified 'first use' via
+    printf '%-26s %5s %7s %5s %8s %10s %-11s %s\n' \
+      -------------------------- ----- ----- ----- -------- ---------- ----------- ---
     u_used=0 u_finds=0 unused_lines=""
     for column in doing done backlog; do
       for dir in "$ROOT/$column"/*; do
@@ -207,13 +248,15 @@ $(usage_for "$name")
 EOF
         unused=$(unused_findings "$dir" "$ids")
         unused=${unused% }
-        printf '%-26s %5s %7s %8s %10s %-11s %s\n' \
-          "$name" "$finds" "$dist/$finds" "$ap" "$fa" "$ffirst" "$vias"
+        area=$(area_commits "$dir")
+        printf '%-26s %5s %7s %5s %8s %10s %-11s %s\n' \
+          "$name" "$finds" "$dist/$finds" "$area" "$ap" "$fa" "$ffirst" "$vias"
         u_used=$((u_used + dist)); u_finds=$((u_finds + finds))
         [ -n "$unused" ] && unused_lines="${unused_lines}  ${name}: ${unused}
 "
       done
     done
+    printf 'area = commits touching the files these cards cite, since the card was written.\n'
     printf '\n%d of %d finding(s) used at least once. ' "$u_used" "$u_finds"
     printf 'A finding used once and never again was an onboarding note.\n'
     if [ -n "$unused_lines" ]; then

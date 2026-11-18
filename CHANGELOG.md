@@ -5,6 +5,27 @@
 
 ## Unreleased
 
+## 0.5.0 — 2026-11-19
+
+The usage table had no denominator, so a zero could be read as "this does not work" when it meant
+"nobody has been in that part of the code". The denominator was already in the cards.
+
+### Added
+
+- `area` column: commits touching the files a card cites, since the card was written. The citations
+  name the files, so the denominator costs nothing to collect and needs no instrumentation.
+- `flow-trail-stats.sh` reads a zero in two ways: no commits in the neighbourhood ("nothing was
+  available to retrieve"), or commits but no rows ("the chance existed; the recording did not
+  happen"). The two need different fixes and used to look identical.
+- `docs/evals.md` "The denominator is a proxy": a finding can be used outside the files it cites,
+  so `area 0` with `used 2/2` is possible and is not a contradiction.
+
+### Changed
+
+- The empty state names the one number that is already true on day one: the record can re-prove
+  itself with `--verify`, even before anything has been reused.
+
+
 ## 0.4.0 — 2026-11-19
 
 Three objections, one of them fatal to the old template: a finding that restates the code is a cache
