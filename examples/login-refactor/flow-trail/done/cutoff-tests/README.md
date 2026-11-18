@@ -25,9 +25,9 @@ The switch is a date, not a secret. The boundary runs on the same runner as ever
 
 | Decision | Why | Rejected alternative | Enforced by |
 | --- | --- | --- | --- |
-| Issue date is the switch | It ends by itself | A present secret: never ends | `session.js:5` |
-| The cutoff is a constant | One file to read | An env var: a second wrong place | `session.js:5` |
-| Test both sides | Off-by-a-day is the bug class | One case mid-window | `test/session.test.js:8` |
+| Issue date is the switch | It ends by itself | A present secret: never ends | `app/src/session.js :: CUTOFF` |
+| The cutoff is a constant | One file to read | An env var: a second wrong place | `app/src/session.js :: CUTOFF` |
+| Test both sides | Off-by-a-day is the bug class | One case mid-window | `app/test/session.test.js :: the cutoff itself is the switch` |
 
 ## Lessons
 

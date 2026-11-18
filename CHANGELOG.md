@@ -5,6 +5,18 @@
 
 ## Unreleased
 
+## 0.2.3 — 2026-11-18
+
+The reference card still cited `session.js:5` in its `Enforced by` column, which is the same rot in
+the column next door. Same anchor, no line numbers.
+
+### Changed
+
+- `examples/login-refactor`: five `Enforced by` cells name a string instead of a line. The rule is
+  not extended to that column on purpose — it may name a section or a function
+  (`## Contract 1–2`, `upstreamFailure()`), so a checker there would need exceptions, and a rule
+  with exceptions is the ceremony this skill deletes.
+
 ## 0.2.2 — 2026-11-18
 
 A citation that names a line number is false after the next commit above it, and no check could say

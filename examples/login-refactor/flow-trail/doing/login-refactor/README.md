@@ -27,9 +27,9 @@ exist, and a test says so.
 
 | Decision | Why | Rejected alternative | Enforced by |
 | --- | --- | --- | --- |
-| Issue date is the switch | It ends by itself | A present secret: never ends | `session.js:8` |
-| 7-day default stays in code | 6 callers, 6 copies | A `ttl` config column | `session.js:5` |
-| The choice lives in one function | One deletion closes it | A wrapper per route | `session.js:7` |
+| Issue date is the switch | It ends by itself | A present secret: never ends | `app/src/session.js :: CUTOFF` |
+| 7-day default stays in code | 6 callers, 6 copies | A `ttl` config column | `app/src/session.js :: const WEEK =` |
+| The choice lives in one function | One deletion closes it | A wrapper per route | `app/src/session.js :: algorithmFor` |
 
 The arguments behind the first row, in full: [`findings.md`](./findings.md#why-the-secret-lost).
 
