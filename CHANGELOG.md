@@ -5,6 +5,27 @@
 
 ## Unreleased
 
+## 0.6.0 — 2026-11-19
+
+The proof was in the docs, written for someone who already cared. The README now leads with it, in
+words that do not require knowing what `falsified` means.
+
+### Added
+
+- `docs/life.svg`: one finding, four rows, six weeks — written, applied, falsified, retired. The
+  third stop is the one people misread, and the caption says why.
+- README "How you know it is working": two commands, a four-row plain-language key for the usage
+  table, and three habits for the agent reading the page.
+- FAQ: what `falsified` means, why a table of zeros is normal for two weeks, how long until it pays
+  for itself, and why a finding ever gets deleted.
+
+### Changed
+
+- README opens with the problem, and concedes its size: "a smaller problem than most tools claim
+  to". The board's mechanics moved below the evidence rather than above it.
+- The FAQ link states no count any more. It had drifted twice.
+
+
 ## 0.5.0 — 2026-11-19
 
 The usage table had no denominator, so a zero could be read as "this does not work" when it meant

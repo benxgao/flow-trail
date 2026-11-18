@@ -1,0 +1,37 @@
+<svg viewBox="0 0 680 208" width="680" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>One finding, from written to retired: four rows in a file</title>
+<desc>A timeline with four stops. Day one: written, after one probe that cost an afternoon. Day nine: applied, when a later task read it and did something differently. Day forty: falsified, when someone relied on it and found it out of date. Day forty-one: retired, with the row kept and the claim dropped. The caption says the third stop is the one people misread, and the only proof that anyone checked.</desc>
+
+<text x="32" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#888780">One finding, four rows, six weeks</text>
+
+<path d="M52 96 L566 96" stroke="#E8E5DD" stroke-width="1"/>
+
+<circle cx="52" cy="96" r="4" fill="#2C2C2A"/>
+<circle cx="232" cy="96" r="4" fill="#2C2C2A"/>
+<circle cx="412" cy="96" r="4" fill="#2C2C2A"/>
+<circle cx="566" cy="96" r="4" fill="#C0BEB6"/>
+
+<text x="52" y="74" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#A8A69E">day 1</text>
+<text x="232" y="74" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#A8A69E">day 9</text>
+<text x="412" y="74" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#A8A69E">day 40</text>
+<text x="566" y="74" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#A8A69E">day 41</text>
+
+<text x="52" y="120" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11.5" fill="#2C2C2A">written</text>
+<text x="52" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">one probe,</text>
+<text x="52" y="155" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">one lost hour</text>
+
+<text x="232" y="120" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11.5" fill="#0F6E56">applied</text>
+<text x="232" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">read by a later</text>
+<text x="232" y="155" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">task, done differently</text>
+
+<text x="412" y="120" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11.5" fill="#0F6E56">falsified</text>
+<text x="412" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">relied on, found</text>
+<text x="412" y="155" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">out of date</text>
+
+<text x="566" y="120" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11.5" fill="#5F5E5A">retired</text>
+<text x="566" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">row stays,</text>
+<text x="566" y="155" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#75736C">claim goes</text>
+
+<path d="M32 172 L648 172" stroke="#EDEBE4" stroke-width="0.5"/>
+<text x="32" y="192" font-family="system-ui, -apple-system, sans-serif" font-size="10.5" fill="#0F6E56">The third one is the row people misread. It is the only proof that anyone checked.</text>
+</svg>

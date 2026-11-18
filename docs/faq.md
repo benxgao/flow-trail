@@ -93,6 +93,19 @@ trying to do.
 - **Do I need all the scripts?** No. They report; none of them gates anything.
 - **Can I use it in a repository with no tests?** Yes. A finding is what you saw and what it costs
   not to know; a command that prints nothing is still evidence, and so is an absence.
+- **What is `falsified`?** Someone relied on a finding and it was no longer true. That row is the
+  good one: the record was read, checked, and a claim retired instead of quietly misleading the next
+  person. A folder where nothing is ever wrong is a folder nobody is checking.
+- **Is a table full of zeros bad?** For two or three weeks, no. The first card has nothing to be
+  reused by; the value starts when a second task touches the same code. The table separates the two
+  zeros: no commits in the area means nothing was available, commits with no rows means nobody wrote
+  it down.
+- **How long until it pays for itself?** One avoided afternoon. In practice that arrives with the
+  second card, when someone nearly rebuilds what the first card argued against.
+- **Why would a finding be deleted?** Silence plus greppable means it was never needed, and a
+  shorter card gets read more often than a longer one.
+- **Who writes `usage.md`?** The session that used the finding, before it ends. The hook prints the
+  command so nobody has to remember the shape.
 
 ## Where it runs
 

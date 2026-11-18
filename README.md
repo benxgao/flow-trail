@@ -1,12 +1,12 @@
-# flow-trail — a task board made of folders
+# flow-trail
 
-**A task board for work that outlives one chat session: three folders in git, markdown inside.**
+**Your agent forgets everything between sessions. This is where the expensive parts go.**
 
-- `backlog/` → `doing/` → `done/`. The folder is the status; nothing else records it.
-- A card is a folder of 1–3 files: what was decided, what was seen, where the work stopped.
-- A move is `git mv`. The card keeps its history, and `git log --follow` still finds it.
-- Any assistant that reads files can work the board. A person reads the same files in an editor.
-- Nothing runs: no server, no database, no account, no token.
+Three folders in git, markdown inside, nothing running.
+
+The code keeps what you chose. Nothing keeps what you turned down. So the next session proposes it
+again, with enthusiasm, and you either argue it again or give in. That is the problem this solves,
+and it is a smaller problem than most tools claim to.
 
 ## Get started
 
@@ -58,6 +58,54 @@ A board in motion, one card per column: [examples/](examples/). Open it and ask 
 
 - The right column is not a list of defects; each of those alternatives does a job this cannot.
 - Scope: the board and the record. Running the work belongs to your assistant.
+
+## How you know it is working
+
+Anything can produce a folder of notes. Two questions decide whether this one is worth keeping, and
+both are commands rather than opinions.
+
+**Is the record still true?**
+
+```bash
+bash ~/.flow-trail/scripts/verify-outcome.sh --run
+# 12 rows: 11 ok, 1 manual, 0 drifted
+```
+
+Every number a card claims carries the command that produced it and an assertion that fails when it
+stops being true. Ten months later the command still runs. A card that has drifted says so, which
+is the point: you find out from a script, not from a bad afternoon.
+
+**Has anyone used it?**
+
+```bash
+bash ~/.flow-trail/scripts/flow-trail-stats.sh
+```
+
+One row per card, then one line per time a later task actually used a finding. The headings look
+like bookkeeping. They are four answers to four questions you would otherwise guess at:
+
+| In the table | In plain words | Why it is worth a column |
+| --- | --- | --- |
+| `applied` | someone read it and did something differently | that is the hour you got back |
+| `falsified` | someone relied on it and found it had expired | good news: the only proof anyone checked |
+| no row at all | nobody has used it | useless, or unfindable. Opposite fixes |
+| `area 5` | five commits touched the code this card is about | five chances to be read. Did any land? |
+
+![Day 1 written, day 9 applied, day 40 falsified, day 41 retired](docs/life.svg)
+
+- `falsified` is the row people misread. It is not a defect report; it is the moment a claim stopped
+  costing anyone anything.
+- A finding that cannot go wrong is a finding nobody checked.
+- Nothing here needs a review meeting. A `Check` command fails, or a `Dies when` date passes, and
+  the row is due. That is the whole maintenance schedule.
+
+For the agent reading this — three habits, in order:
+
+1. `flow-trail-stats.sh` before starting, to see whether this area already has a card.
+2. `verify-outcome.sh --run` before relying on an Outcome number.
+3. One `usage.md` row before finishing, if a finding changed what you did.
+
+Details, including what a canary is and why one is planted: [evals](docs/evals.md).
 
 ## The board
 
@@ -128,6 +176,8 @@ Four other tools keep a plan outside the chat, each pointed at a different job.
 
 ## FAQ
 
+- **Does this make my agent smarter?** No. It stops it from starting over. The model is what it was;
+  it just stops re-proposing what you rejected in March.
 - **Do I need all three columns?** No. `backlog/` is for ideas you mean to keep; open straight
   into `doing/` without it.
 - **Do I need to know git?** Three commands, at the moves. Everything else is editing text.
@@ -137,7 +187,7 @@ Four other tools keep a plan outside the chat, each pointed at a different job.
   There is no view to refresh.
 - **What if I stop using it?** The folders stay and stay readable. Nothing to uninstall.
 
-Thirty-one more, on cost, merges, two people and a decision that turns out wrong:
+The rest, on cost, merges, two people and a decision that turns out wrong:
 [the full FAQ](docs/faq.md).
 
 ## Evidence
@@ -147,14 +197,17 @@ Thirty-one more, on cost, merges, two people and a decision that turns out wrong
 - **Tested twice blind.** Both runs changed the design: [design notes](references/design-notes.md).
 - **Three columns, not five.** Four closing phases were completed 0 times in 7 plans.
 - **Every rule states its measurement.** The docs are checked by a script.
+- **The record answers back.** `verify-outcome.sh` re-runs every claimed number; a card that drifted
+  reports it instead of waiting to be noticed.
 
 ## More
 
 - [Example board](examples/) — mid-flight, three cards, ready to read.
 - [Install](docs/install.md) — the paste block, what it writes, where each harness looks.
 - [How it works](docs/how-it-works.md) — columns, files, phases, markers, closing.
-- [FAQ](docs/faq.md) — thirty-one questions kept off this page.
+- [FAQ](docs/faq.md) — the questions kept off this page.
 - [Hooks](docs/hooks.md) — make it fire automatically, per harness.
+- [Evals](docs/evals.md) — whether the record is read, and how to tell quiet from broken.
 - [Design notes](references/design-notes.md) — every rule, and its measurement.
 
 Try one card. If you never come back to it, it cost three files.
