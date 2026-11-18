@@ -99,14 +99,16 @@ ls flow-trail/                           # README.md  skips.md
 - Test the payload first: `bash ~/.flow-trail/scripts/session-start.sh`
 - Silent outside a project that has a `flow-trail/` folder. Per harness: [hooks.md](hooks.md).
 
-## The two scripts, optional
+## The scripts, optional
 
 ```bash
-bash ~/.flow-trail/scripts/flow-trail-lint.sh flow-trail   # card shape, thirteen checks
+bash ~/.flow-trail/scripts/flow-trail-lint.sh flow-trail   # card shape, fifteen checks
 bash ~/.flow-trail/scripts/verify-outcome.sh --run         # re-run closed cards' Outcomes
+bash ~/.flow-trail/scripts/flow-trail-stats.sh             # one row per card
 ```
 
-- Both report and exit 1. Neither gates a commit, and the skill never calls them.
+- They report and exit 1. None gates a commit, and the skill never calls them.
+- `flow-trail-stats.sh --verify` runs the middle one on every card and adds a column.
 
 ## The manifest
 

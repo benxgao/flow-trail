@@ -258,6 +258,9 @@ Copy verbatim into `flow-trail/doing/<card>/findings.md`.
 - Ordered by what it costs the next reader **not** to know. Not by date: the expensive one is
   rarely the last one found.
 - Every entry names what cites it. One that nothing cites is the first candidate for retirement.
+- A citation is a path plus a string that must still be in that file — `fixtures.ts :: function
+  scopeToStage(` — never a line number. A line number is false after the next commit above it, and
+  no check can tell a moved citation from a missing one. The linter greps the string.
 - Empty is valid: a card that produced no evidence leaves the file empty.
 
 ````markdown
@@ -272,7 +275,7 @@ that has stopped mattering can be found and retired instead of outliving its use
 - **Saw** (<date>, <where>) — <the observation, and the command or path that produced it>
 - **Means** — <what it implies for the code or the plan>
 - **Cost if unknown** — <what the next person would do instead, and how long it would take>
-- **Cited by** — `<path:line>`, or `#F1` markers in the code, or `nothing yet`
+- **Cited by** — `path :: a string still in that file`, `#F1` in the code, or `nothing yet`
 - **Status** — <fixed / kept / still open, one clause>
 
 ## Reference — <a table someone will look up>, verified <date>
@@ -415,15 +418,31 @@ Closing is a distillation, not a tidy-up. Three moves:
 bash <this-skill>/scripts/flow-trail-lint.sh flow-trail
 ```
 
-- Thirteen checks: a card in `doing/` has both files, no `progress.md` in `done/`, six headings.
+- Fifteen checks: a card in `doing/` has both files, no `progress.md` in `done/`, six headings.
 - And: no surviving checkbox, a backlog card carries no `progress.md`, skip rows have four cells.
 - And: findings is linked from its README, every findings heading is `## F<n> —` plus an optional
   `## Reference` and `## Receipts`, each `F` entry carries `Cost if unknown` and `Cited by`.
+- And: every citation resolves — `path :: needle` names a file that exists and a string still in
+  it, which is why a citation is not a line number.
 - And: no `Enforced by` cell points at `progress.md`, which is deleted at close.
 - Three warnings: closed README 120 lines, findings 200, more than one card in `doing/`.
+- One more: a citation written as `path:line` warns, because nothing can check it.
 - Reports, exits 1, gates nothing. No skill directory? Skip it.
 - Templates in this file: `bash <this-skill>/scripts/template-lint.sh`.
   Prose lint skips fenced blocks, so nothing else checks what a verbatim copy inherits.
+
+## Read the board (optional)
+
+```bash
+bash <this-skill>/scripts/flow-trail-stats.sh            # one row per card
+bash <this-skill>/scripts/flow-trail-stats.sh --verify   # and re-run every Outcome command
+```
+
+- Columns: `edited`, `finds`, `cited`, `rows`, `strict` (rows with a `Verify` assertion), `manual`.
+- `cited 0/5` on a closed card is the number that says nothing has used it yet.
+- `--verify` adds an `ok/drift` column and executes the recorded commands; the rest reads files.
+- Do not commit a copy of this table. It would go stale exactly like a line number does: the
+  command is the document.
 
 ## Verify the record (optional, any time)
 
@@ -441,7 +460,8 @@ bash <this-skill>/scripts/verify-outcome.sh --run
 
 ## Files
 
-- `scripts/` — the installer, the linter, the hook payload, the outcome check, the prose check.
+- `scripts/` — the installer, the linter, the hook, the stats table, the outcome check, the prose
+  check.
 - `docs/` — `install.md` (per harness), `hooks.md` (wiring), `how-it-works.md` (mechanics),
   `writing.md` (house style).
 - `docs/faq.md` — the answers kept off the README: cost, merges, two people, a dead rule.

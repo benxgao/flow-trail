@@ -5,6 +5,31 @@
 
 ## Unreleased
 
+## 0.2.2 — 2026-11-18
+
+A citation that names a line number is false after the next commit above it, and no check could say
+whether it moved or died. A citation now names a string, and the linter greps it.
+
+### Added
+
+- `Cited by` takes `path :: a string that must still be in that file` instead of `path:line`. Lint
+  check E11 resolves every citation: a missing file, or a string that is gone, is an error.
+- A citation written as `path:line` still parses and warns (W4) — nothing can check it, and a
+  warning is the honest signal.
+- `scripts/flow-trail-stats.sh`: one row per card — edited, findings, cited, Outcome rows, how
+  many carry a `Verify` assertion, manual, lines — then one line of totals. Read-only. `--verify`
+  adds an `ok/drift` column and runs the recorded commands; `--brief` is the line the hook shows.
+- FAQ: why a line number is the wrong address, and how to tell whether anyone uses the board.
+
+### Changed
+
+- `session-start.sh` delegates its closed-card line to `flow-trail-stats.sh --brief`, so the hook
+  and the table agree on which cards count as recent. The inline loop stays as a fallback.
+- `verify-outcome.sh` runs recorded commands from the project root (`dirname <root>`) rather than
+  from the reader's working directory. Running a board from a parent folder used to turn every
+  `cd app && …` row into a DRIFT.
+- Lint is fifteen checks: eleven errors, four warnings.
+
 ## 0.2.1 — 2026-11-18
 
 Findings were logs. Twenty rows saying the suite passed 128 times, and the one entry that mattered

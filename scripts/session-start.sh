@@ -56,19 +56,25 @@ while IFS= read -r dir; do
 done < <(find "$ROOT/doing" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 
 # Closed cards are the half of the board a session never otherwise learns about.
-# Names only: the hook prompts a look, it does not summarise.
-recent=""
-closed=0
-while IFS= read -r dir; do
-  [ -n "$dir" ] || continue
-  name=$(basename "$dir")
-  recent="${recent:+$recent, }$name"
-  closed=$((closed + 1))
-  [ "$closed" -ge 3 ] && break
-done < <(ls -dt "$ROOT"/done/*/ 2>/dev/null)
+# The formatter lives in flow-trail-stats.sh so the hook and the table agree on
+# which cards count as recent; the loop below is the fallback for a partial copy.
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+if [ -x "$SCRIPT_DIR/flow-trail-stats.sh" ]; then
+  bash "$SCRIPT_DIR/flow-trail-stats.sh" --brief "$ROOT"
+else
+  recent=""
+  closed=0
+  while IFS= read -r dir; do
+    [ -n "$dir" ] || continue
+    name=$(basename "$dir")
+    recent="${recent:+$recent, }$name"
+    closed=$((closed + 1))
+    [ "$closed" -ge 3 ] && break
+  done < <(ls -dt "$ROOT"/done/*/ 2>/dev/null)
 
-if [ -n "$recent" ]; then
-  echo "done: $recent — closed cards; open one before re-deciding in its area"
+  if [ -n "$recent" ]; then
+    echo "done: $recent — closed cards; open one before re-deciding in its area"
+  fi
 fi
 
 exit 0

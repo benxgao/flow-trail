@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# flow-trail lint — thirteen checks over a flow-trail/ root.
+# flow-trail lint — fifteen checks over a flow-trail/ root.
 #
 #   bash flow-trail-lint.sh [root]      # default: flow-trail
 #
@@ -49,11 +49,50 @@ check_findings() {
   [ "$ncite" -eq "$nf" ] || err "E9 $nf finding(s) but $ncite 'Cited by' line(s): $dir"
 }
 
+# A citation is `path :: string that must still be there`. A line number is not
+# checkable: it is false after the next commit above it, and no grep can say
+# whether it moved or died. This resolves the needle instead.
+check_citations() {
+  local dir="$1" f="$1/findings.md" proj target cpath cneedle ref line
+  [ -f "$f" ] || return 0
+  proj=$(dirname "$ROOT")
+  while IFS= read -r line; do
+    case "$line" in *'**Cited by**'*) ;; *) continue ;; esac
+    while IFS= read -r ref; do
+      [ -n "$ref" ] || continue
+      case "$ref" in
+        *nothing\ yet* | *http*) continue ;;
+        *' :: '*)
+          cpath="${ref%% :: *}"
+          cneedle="${ref#* :: }"
+          # A bare README.md means this card's own README, not the project's.
+          if [ "$cpath" = "README.md" ]; then
+            target="$dir/README.md"
+          else
+            target="$proj/$cpath"
+          fi
+          if [ ! -f "$target" ]; then
+            err "E11 cited file does not exist: $dir -> $cpath"
+          elif ! grep -qF -- "$cneedle" "$target"; then
+            err "E11 citation rotted: $dir -> $cpath :: $cneedle"
+          fi
+          ;;
+        *:[0-9]*)
+          warn "W4 citation carries a line number, which rots: $dir -> $ref" ;;
+        */* | *.*)
+          # A bare path: the file is all that can be checked without a needle.
+          [ -f "$proj/$ref" ] || err "E11 cited file does not exist: $dir -> $ref" ;;
+      esac
+    done < <(printf '%s\n' "$line" | grep -o '`[^`]*`' | tr -d '`')
+  done < "$f"
+}
+
 # --- doing: README + progress ----------------------------------------------
 while IFS= read -r dir; do
   [ -f "$dir/README.md" ] || err "E1 card in doing has no README.md: $dir"
   [ -f "$dir/progress.md" ] || err "E1 card in doing has no progress.md: $dir"
   check_findings "$dir"
+  check_citations "$dir"
 done < <(find "$ROOT/doing" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 
 # --- backlog: one page, no state -------------------------------------------
@@ -87,6 +126,7 @@ while IFS= read -r dir; do
       warn "W2 findings.md is $flines lines (cap $FINDINGS_CAP): $dir"
   fi
   check_findings "$dir"
+  check_citations "$dir"
   # progress.md is deleted at close, so a pointer to it enforces nothing.
   if grep -q 'progress\.md' "$dir/README.md"; then
     err "E10 closed README points at progress.md, which no longer exists: $dir"

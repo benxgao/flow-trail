@@ -30,7 +30,7 @@ costs a reader **not** to know — not by when it was found. Each entry ends wit
   constructor, and the test that proves the cutoff works cannot pass until it is a parameter.
 - **Cost if unknown** — the failure reads as "the cutoff logic is wrong", and a day goes into the
   date comparison while the real defect is an argument that never reaches the function.
-- **Cited by** — `app/test/session.test.js`, case 5.
+- **Cited by** — `app/test/session.test.js :: a caller-supplied ttl wins over the default`.
 - **Status** — P2.2, being written.
 
 ## F2 — The signing secret is present in every environment today
@@ -42,7 +42,7 @@ costs a reader **not** to know — not by when it was found. Each entry ends wit
 - **Cost if unknown** — the window opens in environments nobody watches, and it closes only when
   the last person remembers to unset a variable. No date, no test, and no way to tell a finished
   migration from a forgotten one.
-- **Cited by** — `README ## Decisions`, the row rejecting the env-var switch.
+- **Cited by** — `README.md :: Issue date is the switch` — the row rejecting the env-var switch.
 - **Status** — drove the choice of a cutoff date over a flag.
 
 ## F3 — Clock skew is unmeasured

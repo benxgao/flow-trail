@@ -32,6 +32,12 @@ trying to do.
 - **Why do findings have numbers?** Because `Cited by` needs an address. `#F1` in a test comment
   turns "this evidence was worth keeping" into a grep, and a finding nobody cites is the first
   entry to retire.
+- **Why not cite a line number?** Because the next commit above it makes it false, and no check can
+  tell a moved citation from a dead one. `path :: a string that must still be in the file` survives
+  the move and fails the lint when the string goes away.
+- **How do I know whether anyone is using the board?** `flow-trail-stats.sh` prints one row per
+  card. The `cited` column is the one that answers it, and `--verify` says whether the claims still
+  hold.
 - **Why is `## Measurements` gone?** It was a log. A number that only proves the work happened
   belongs under `## Receipts`, where deleting it costs nothing.
 - **What if a decision turns out wrong?** Add a row. The old row keeps its date and its rejected

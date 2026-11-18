@@ -138,12 +138,14 @@ git mv flow-trail/doing/<card> flow-trail/done/<card>
 bash <this-skill>/scripts/flow-trail-lint.sh flow-trail
 ```
 
-- Ten error checks: a card in `doing/` has both files; a card in `backlog/` has one.
+- Eleven error checks: a card in `doing/` has both files; a card in `backlog/` has one.
 - And: no `progress.md` in `done/`; six headings; no checkbox; findings linked from its README.
 - And: skip rows carry four cells.
 - And: findings headings are `## F<n> —`, `## Reference` or `## Receipts`; a `## Measurements`
   section is a receipt wearing a finding's name.
 - And: each `F` entry carries `Cost if unknown` and `Cited by`, counted per file.
+- And: every citation resolves. `path :: needle` — the file exists and the string is still in it.
+  A `path:line` citation warns instead, because no check can tell a moved line from a dead one.
 - And: a closed README never points at `progress.md`, which is deleted at close.
 - Three warnings: closed README over 120 lines, findings over 200, more than one card in `doing/`.
 - It reports, exits 1 on error, gates nothing. No CI job, on purpose.
@@ -187,16 +189,32 @@ bash <this-skill>/scripts/verify-outcome.sh --run    # run and compare
 
 ## Reading it back
 
-A record nobody reads is a write-only file. Two commands are the read path:
+A record nobody reads is a write-only file. Three commands are the read path:
 
 ```bash
 grep -l -i "<the area>" flow-trail/done/*/README.md 2>/dev/null || true
 bash <skill>/scripts/session-start.sh
+bash <skill>/scripts/flow-trail-stats.sh
 ```
 
 - The first runs before opening a card.
 - A closed card that already learned something should be cited, not rediscovered.
 - The second runs every session, through the hook.
+- The third is the only view of the whole board, and the only one that can say a card is not being
+  used:
+
+```
+card                       column edited     finds   cited  rows strict  manual  lines
+------------------------   ------ ---------- -----   ----- ----- ------ ------- ------
+api-optimization           done   2026-11-18     5     4/5    12     11       1    109
+login-refactor             doing  2026-11-18     3     2/3     2      0       0     68
+```
+
+- `cited 4/5` counts findings whose `Cited by` names something other than `nothing yet`.
+- `strict` counts Outcome rows carrying a `Verify` assertion; `--verify` adds `ok/drift` and runs
+  them.
+- Nothing is written, and the table is not a file on purpose: a committed copy rots in the same way
+  a line number does.
 
 ## Declining a card
 

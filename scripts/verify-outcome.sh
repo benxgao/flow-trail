@@ -30,6 +30,10 @@ done
 
 [ -d "$ROOT/done" ] || { printf 'no %s/done/ here — nothing to verify\n' "$ROOT"; exit 0; }
 
+# The recorded commands were written for the project root, not for wherever the
+# reader happens to stand. `dirname flow-trail` is "." when run from the root.
+PROJ=$(cd "$(dirname "$ROOT")" && pwd)
+
 checked=0
 okcount=0
 loose=0
@@ -98,7 +102,7 @@ while IFS= read -r track; do
     fi
 
     if [ "$has_verify" -eq 1 ]; then
-      if bash -c "$verify" >/dev/null 2>&1; then
+      if (cd "$PROJ" && bash -c "$verify") >/dev/null 2>&1; then
         printf 'ok    %-12s %-22s %s\n' "$label" "$metric" "$verify"
         okcount=$((okcount + 1))
       else
@@ -108,7 +112,7 @@ while IFS= read -r track; do
       continue
     fi
 
-    out=$(bash -c "$cmd" 2>&1)
+    out=$(cd "$PROJ" && bash -c "$cmd" 2>&1)
     status=$?
     if [ "$status" -ne 0 ]; then
       printf 'FAIL  %-12s %-22s %s -> exit %d\n' "$label" "$metric" "$cmd" "$status"
