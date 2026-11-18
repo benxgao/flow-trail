@@ -7,7 +7,7 @@
 #   1. Link this skill into every harness skills folder the machine has.
 #   2. Append the pointer to AGENTS.md, and to CLAUDE.md / GEMINI.md when they exist.
 #   3. Keep the skill's own source out of git, via .gitignore.
-#   4. Create flow-trail/README.md and flow-trail/skips.md.
+#   4. Create flow-trail/README.md, skips.md and usage.md.
 #
 # Idempotent: a second run reports the same state and writes nothing.
 
@@ -157,6 +157,7 @@ initiative, plain markdown in git; no tool, no database, no CI.
 | `doing/<card>/progress.md` | State — phases, baseline, session log | deleted at close |
 | `done/<card>/` | The same card, closed: README and findings | forever |
 | `skips.md` | Changes deliberately not tracked, with the reason | forever |
+| `usage.md` | Later tasks that actually used a finding | forever |
 
 The column is the folder, so a card is moved, never copied:
 
@@ -188,7 +189,15 @@ if [ ! -f "$ROOT/flow-trail/skips.md" ]; then
     SKIPS_STATE="added"
   fi
 fi
-BOARD_STATE="README.md ($README_STATE), skips.md ($SKIPS_STATE)"
+USAGE_STATE="already there"
+if [ ! -f "$ROOT/flow-trail/usage.md" ] && [ -x "$SKILL_DIR/scripts/flow-trail-usage.sh" ]; then
+  if [ "$DRY" -eq 1 ]; then
+    USAGE_STATE="would create"
+  else
+    bash "$SKILL_DIR/scripts/flow-trail-usage.sh" --init "$ROOT/flow-trail" >/dev/null && USAGE_STATE="added"
+  fi
+fi
+BOARD_STATE="README.md ($README_STATE), skips.md ($SKIPS_STATE), usage.md ($USAGE_STATE)"
 
 # Report. The last line is the only thing a person has to act on.
 # Arrays are expanded through an empty-safe idiom: bash 3.2 is set -u strict.

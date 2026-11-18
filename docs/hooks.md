@@ -14,6 +14,9 @@ doing: flow-trail/doing/jwt-policy — P2 — run npm test, then close [last 202
 ```
 
 - `scripts/session-start.sh` prints exactly that.
+- It adds one line naming the three most recently closed cards, and one `--add` command for the
+  usage log underneath it. That is the only reminder an agent gets that retrieval is meant to be
+  recorded, so it is printed at the start of every session rather than in a document.
 - It prints nothing in a project without a `flow-trail/` folder: no noise elsewhere.
 
 Test it before wiring anything:

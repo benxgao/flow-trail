@@ -36,8 +36,16 @@ trying to do.
   tell a moved citation from a dead one. `path :: a string that must still be in the file` survives
   the move and fails the lint when the string goes away.
 - **How do I know whether anyone is using the board?** `flow-trail-stats.sh` prints one row per
-  card. The `cited` column is the one that answers it, and `--verify` says whether the claims still
-  hold.
+  card. `cited` says what the card points at; the usage table under it says what a later task
+  actually consumed. Only the second is about retrieval.
+- **What counts as usage?** A finding that changed what was done, or one that turned out to be
+  false. Reading a card is not usage, and neither is a row whose `ref` does not resolve.
+- **Who writes the row?** The session that used the finding, before it ends, with
+  `flow-trail-usage.sh --add`. The session-start hook prints the command so nobody has to remember
+  the shape.
+- **What if nobody ever writes one?** Then the board is a diary, and the usage table saying `0
+  events` is the honest finding. `docs/evals.md` has the control that tells a quiet log from a
+  working one.
 - **Why is `## Measurements` gone?** It was a log. A number that only proves the work happened
   belongs under `## Receipts`, where deleting it costs nothing.
 - **What if a decision turns out wrong?** Add a row. The old row keeps its date and its rejected

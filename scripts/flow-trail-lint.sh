@@ -10,6 +10,8 @@
 set -uo pipefail
 
 ROOT="${1:-flow-trail}"
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+SILENT_DAYS="${FLOW_TRAIL_SILENT_DAYS:-30}"
 HEADINGS=("## Outcome" "## Contract" "## Decisions" "## Lessons" "## Residual" "## Where the proof lives")
 LINE_CAP=120
 FINDINGS_CAP=200
@@ -140,6 +142,38 @@ if [ -f "$ROOT/skips.md" ]; then
     [ "$cells" -lt 4 ] && err "E5 skip row has $cells cells, needs 4: $row"
   done < <(grep -E '^\|[^|]+\|' "$ROOT/skips.md" | grep -vE '^\|[[:space:]]*-+' | grep -vF '| Date |')
 fi
+
+# --- usage: a row is an event only if its ref resolves ----------------------
+if [ -f "$ROOT/usage.md" ] && [ -x "$SCRIPT_DIR/flow-trail-usage.sh" ]; then
+  while IFS= read -r bad; do
+    [ -n "$bad" ] && err "E12 usage $bad"
+  done < <(bash "$SCRIPT_DIR/flow-trail-usage.sh" --check "$ROOT" 2>/dev/null)
+fi
+
+# Silence is the third state, and after a month it is worth a prompt: a card
+# nobody has used may be dead weight, or may be unfindable. The two need
+# different fixes, so the warning names the card rather than guessing.
+days_since() {
+  if ts=$(date -d "$1" +%s 2>/dev/null); then :
+  elif ts=$(date -j -f "%Y-%m-%d" "$1" +%s 2>/dev/null); then :
+  else return 1; fi
+  echo $(( ($(date +%s) - ts) / 86400 ))
+}
+
+while IFS= read -r dir; do
+  [ -f "$dir/findings.md" ] || continue
+  finds=$(grep -cE '^## F[0-9]+ — ' "$dir/findings.md" || true)
+  [ "$finds" -gt 0 ] || continue
+  name=$(basename "$dir")
+  used=0
+  [ -f "$ROOT/usage.md" ] && used=$(grep -cE "^\| [0-9-]+ \| $name \|" "$ROOT/usage.md" 2>/dev/null || true)
+  [ "$used" -gt 0 ] && continue
+  last=$(git -C "$(dirname "$ROOT")" log -1 --format=%cs -- "$dir" 2>/dev/null || true)
+  [ -n "$last" ] || continue
+  age=$(days_since "$last") || continue
+  [ "$age" -ge "$SILENT_DAYS" ] &&
+    warn "W5 no usage event in ${age}d, $finds finding(s) unused: $name — dead weight or unfindable?"
+done < <(find "$ROOT/done" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 
 # --- one card in flight -----------------------------------------------------
 doing=$(find "$ROOT/doing" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')

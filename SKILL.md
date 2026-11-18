@@ -21,7 +21,7 @@ agent_created: true
 
 - One card in `doing/`. A second is two things half-built; say which one is current.
 - A lane directory appears the first time a card needs it. Do not create empty ones.
-- `skips.md` and the root `README.md` sit beside the columns, not in them.
+- `skips.md`, `usage.md` and the root `README.md` sit beside the columns, not in them.
 
 ## "Create a plan" means create the card
 
@@ -80,6 +80,26 @@ The pointer is what makes the next session find the folder. The skill only cover
 - A pointer is read only if the agent happens to look.
 - Wire `scripts/session-start.sh` into the harness's session-start hook: `docs/hooks.md`.
 - It prints the folder and each card's `next:` line, and nothing outside a project.
+
+## Recording what you used
+
+A closed card exists for a later task. When one of its findings actually changes what you do, that
+event gets a row in `usage.md` — not in the card, because it happens after the card closed.
+
+```bash
+bash <this-skill>/scripts/flow-trail-usage.sh --add <card> <F#> applied \
+  "one line: what it changed" --ref commit:<sha> --via grep
+```
+
+- Two kinds, and no third: `applied` (it changed what was done) and `falsified` (it was no longer
+  true when someone relied on it).
+- Reading a card is not an event, and a row whose `ref` does not resolve is not an event either:
+  `commit:`, `test:` or `pr:` is the difference between a memory and a record.
+- `--via` records how it was found — `grep`, `hook`, `readme`, `memory`. That column is the one
+  worth debugging: it says which surface actually delivers a finding.
+- No row at all is data too. `flow-trail-stats.sh` lists the findings nothing has used, which is
+  either dead weight or an unfindable one, and those need different fixes.
+- Two sessions appending at once conflict on the last line. Keep both rows; order is a nicety.
 
 ## Parking an idea
 
@@ -159,6 +179,7 @@ Order them so every phase leaves the repo runnable.
 - [ ] `## Outcome` carries Before, After and Command
 - [ ] Every decision has a `## Decisions` row with its rejected alternative
 - [ ] `## Residual` written; "nothing" is valid, silence is not
+- [ ] Every earlier card this work used has a `usage.md` row; "none" is valid
 - [ ] `git rm flow-trail/doing/<card>/progress.md`
 - [ ] `git mv flow-trail/doing/<card> flow-trail/done/<card>`
 
@@ -172,6 +193,7 @@ tried.
 
 - Did: <what changed, by file or sub-item>
 - Verified by: <command and result> — or `none`
+- Used: <card F#> — <what it changed>, or `none` (a row in `usage.md` if not `none`)
 - Tried and dropped: <what you attempted and why it failed; the most valuable line here>
 - Next: <the single next action>
 - Blocked on: <none | person / track / missing decision>
@@ -315,6 +337,7 @@ initiative, plain markdown in git; no tool, no database, no CI.
 | `doing/<card>/progress.md` | State — phases, baseline, session log | deleted at close |
 | `done/<card>/` | The same card, closed: README and findings | forever |
 | `skips.md` | Changes deliberately not tracked, with the reason | forever |
+| `usage.md` | Later tasks that actually used a finding | forever |
 
 The column is the folder, so a card is moved, never copied:
 
@@ -356,6 +379,29 @@ idea arrived.>
 | <the shape the idea was written in> | <why that shape> | <what lost> |
 ````
 
+## Template 6 — `usage.md` (the log, kept)
+
+Written once per repository, beside the columns. `flow-trail-usage.sh --init` writes it; every
+`--add` appends one row.
+
+````markdown
+# Usage
+
+One row each time a later task actually used a finding from a card. Append-only; the newest row
+goes last, so a diff shows only what was added.
+
+Reading a card is not usage, and neither is a row without a ref that resolves. Two kinds:
+
+- `applied` — the finding changed what was done.
+- `falsified` — the finding was no longer true when someone relied on it.
+
+`via` records how it was found, which is the part worth debugging: `grep`, `hook`, `readme`,
+`memory` (remembered without reading — plausible, and worth a second look).
+
+| Date | Card | Finding | Kind | Via | Ref | What it changed |
+| --- | --- | --- | --- | --- | --- | --- |
+````
+
 ## While working
 
 - The column says where the card is. The phase list says where the work is.
@@ -379,6 +425,7 @@ Where things go. Writing to the wrong file is how a card becomes unreadable:
 | a number, and its command | `Baseline` → `Outcome` | a number without a command is a story |
 | a finding, what it costs, what cites it | `findings.md ## F<n>` | the reader decides in one line whether to keep reading |
 | a number that only proves work happened | `findings.md ## Receipts` | it answers no question the next reader has |
+| a later task that used a finding | `usage.md` | the event happens after the card closed |
 | state, next action, what you tried | `progress.md` | all of it expires |
 
 - `code` and `verified` are separate facts. Never write `[x]` because the code compiles.
@@ -418,14 +465,16 @@ Closing is a distillation, not a tidy-up. Three moves:
 bash <this-skill>/scripts/flow-trail-lint.sh flow-trail
 ```
 
-- Fifteen checks: a card in `doing/` has both files, no `progress.md` in `done/`, six headings.
+- Seventeen checks: a card in `doing/` has both files, no `progress.md` in `done/`, six headings.
 - And: no surviving checkbox, a backlog card carries no `progress.md`, skip rows have four cells.
 - And: findings is linked from its README, every findings heading is `## F<n> —` plus an optional
   `## Reference` and `## Receipts`, each `F` entry carries `Cost if unknown` and `Cited by`.
 - And: every citation resolves — `path :: needle` names a file that exists and a string still in
   it, which is why a citation is not a line number.
 - And: no `Enforced by` cell points at `progress.md`, which is deleted at close.
+- And: every `usage.md` row names a card and a finding that exist, with a `ref` that resolves.
 - Three warnings: closed README 120 lines, findings 200, more than one card in `doing/`.
+- And: a closed card with findings and no usage row after `FLOW_TRAIL_SILENT_DAYS` (default 30).
 - One more: a citation written as `path:line` warns, because nothing can check it.
 - Reports, exits 1, gates nothing. No skill directory? Skip it.
 - Templates in this file: `bash <this-skill>/scripts/template-lint.sh`.
@@ -439,7 +488,9 @@ bash <this-skill>/scripts/flow-trail-stats.sh --verify   # and re-run every Outc
 ```
 
 - Columns: `edited`, `finds`, `cited`, `rows`, `strict` (rows with a `Verify` assertion), `manual`.
-- `cited 0/5` on a closed card is the number that says nothing has used it yet.
+- A second table counts events from `usage.md`: findings used, applied, falsified, first use, via.
+- `cited` is what the card points at; `used` is what a later task actually consumed. Only the second
+  is about retrieval, and only `usage.md` carries it.
 - `--verify` adds an `ok/drift` column and executes the recorded commands; the rest reads files.
 - Do not commit a copy of this table. It would go stale exactly like a line number does: the
   command is the document.
@@ -460,8 +511,8 @@ bash <this-skill>/scripts/verify-outcome.sh --run
 
 ## Files
 
-- `scripts/` — the installer, the linter, the hook, the stats table, the outcome check, the prose
-  check.
+- `scripts/` — the installer, the linter, the hook, the usage log, the stats table, the outcome
+  check, the prose check.
 - `docs/` — `install.md` (per harness), `hooks.md` (wiring), `how-it-works.md` (mechanics),
   `writing.md` (house style).
 - `docs/faq.md` — the answers kept off the README: cost, merges, two people, a dead rule.

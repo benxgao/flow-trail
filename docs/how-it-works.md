@@ -55,6 +55,8 @@ flow-trail/
 - The split is by role, not by topic.
 - It makes closing mechanical: conclusions up, evidence stays, state deleted.
 - Nothing in the state layer is still true tomorrow.
+- `usage.md` is not a card file: it lives beside the columns, because the event it records happens
+  after the card closed. One row per later task that actually used a finding.
 
 Writing to the wrong file is how a card becomes unreadable:
 
@@ -64,6 +66,7 @@ Writing to the wrong file is how a card becomes unreadable:
 | a number, and its command | `Baseline` → `## Outcome` |
 | a finding, what it costs, what cites it | `findings.md ## F<n>` |
 | a number that only proves work happened | `findings.md ## Receipts` |
+| a later task that used a finding | `usage.md` |
 | state, next action, what you tried | `progress.md` |
 
 ## The six headings
@@ -211,6 +214,10 @@ login-refactor             doing  2026-11-18     3     2/3     2      0       0 
 ```
 
 - `cited 4/5` counts findings whose `Cited by` names something other than `nothing yet`.
+- Below it, a second table reads `usage.md`: findings used, applied, falsified, first use, via. The
+  first table is what the card points at; only the second is about retrieval.
+- `usage.md` grows by one row per event: `flow-trail-usage.sh --add <card> <F#> applied "<what it
+  changed>" --ref commit:<sha>`. How to read the result: [evals](evals.md).
 - `strict` counts Outcome rows carrying a `Verify` assertion; `--verify` adds `ok/drift` and runs
   them.
 - Nothing is written, and the table is not a file on purpose: a committed copy rots in the same way

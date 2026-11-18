@@ -5,6 +5,35 @@
 
 ## Unreleased
 
+## 0.3.0 — 2026-11-19
+
+`stats.sh` measured the card. Nothing measured the later task that read it. A log now records that
+event, and the skill asks for it at the three moments it can still happen.
+
+### Added
+
+- `flow-trail/usage.md`: append-only, one row per event. Two kinds only — `applied` (a finding
+  changed what was done) and `falsified` (it was no longer true when someone relied on it). `via`
+  records `grep`, `hook`, `readme` or `memory`: which surface actually delivers a finding.
+- `scripts/flow-trail-usage.sh` with `--add`, `--check` and `--init`. `--add` refuses a row with no
+  ref, a finding the card does not have, or an empty description.
+- `docs/evals.md`: the four numbers, the silence triage, the canary — one deliberately wrong
+  finding, so a quiet log can be told from a working one — and the monthly audit.
+- Lint E12 resolves every usage ref: a `commit:` must exist, a `test:` must exist. W5 warns when a
+  closed card has findings and no event after `FLOW_TRAIL_SILENT_DAYS` (default 30).
+- `flow-trail-stats.sh` grows a usage table under the card table: findings used, applied, falsified,
+  first use, via — plus the list of findings nothing has used.
+- `session-start.sh` prints the `--add` command under the closed-card line. The instruction that
+  decays fastest is the one nobody repeats.
+
+### Changed
+
+- `progress.md` session notes gain `- Used: <card F#> — <what changed>`, and the close checklist
+  asks whether an earlier card was used. Both exist so the row is written while the session still
+  knows what happened, not reconstructed a week later.
+- `install.sh` creates `usage.md` with the board.
+- Lint is seventeen checks: twelve errors, five warnings.
+
 ## 0.2.3 — 2026-11-18
 
 The reference card still cited `session.js:5` in its `Enforced by` column, which is the same rot in

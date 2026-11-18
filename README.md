@@ -76,6 +76,8 @@ flow-trail/
 
 - A card gains weight on the way right, then loses it: 1 file, 3 files, 2 files.
 - `progress.md` is the only file that dies. It carries the state; the other two carry the work.
+- `usage.md` sits beside the columns: one row each time a later task actually used a finding, so
+  whether the record is being read is a number and not an opinion: [evals](docs/evals.md).
 
 Three moves, and no dashboard:
 
