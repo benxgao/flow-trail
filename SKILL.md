@@ -34,10 +34,11 @@ Triggers to act on, not to discuss:
 
 Then, in this order, without asking permission:
 
-1. Search the archive.
-   - `grep -l -i "<the area>" flow-trail/done/*/README.md 2>/dev/null || true`
+1. Search the archive and the backlog.
+   - `grep -l -i "<the area>" flow-trail/{done,backlog}/*/README.md 2>/dev/null || true`
    - A contradicting `## Lessons` line belongs in your `## Decisions`, citing that card.
-   - This is the only moment the archive is worth reading.
+   - A parked page in the same area is this card, or one line saying why it stays parked.
+   - This is the only moment either is worth reading.
 2. Name it. `flow-trail/doing/<card>/`, kebab-case, two to four words, naming the change.
    - Already in `backlog/`: `git mv backlog/<card> doing/<card>` and keep its page as the README.
    - No ticket number.
@@ -60,9 +61,12 @@ Never deliver a plan as a chat-only artifact, an in-conversation TODO list, or a
 
 - Create `flow-trail/README.md` from template 4.
 - Create `flow-trail/skips.md` with the four-cell header from `Not worth a card` below.
+- Create `flow-trail/usage.md` from template 6: an empty log with its four-cell header.
 - Append the pointer below to `AGENTS.md`, or `CLAUDE.md`, whichever the repo uses.
-- A board from `scripts/install.sh` already holds both files and the pointer: write only what is
-  missing, and say which of the three you had to add.
+- A board from `scripts/install.sh` already holds those files and the pointer: write only what is
+  missing, and say which of them you had to add.
+- A board with no `usage.md` was written before 0.3.0: add it from template 6 now, and expect
+  findings older than 0.4.0 too. `scripts/flow-trail-lint.sh` names both, with the release.
 
 ```markdown
 ## Work tracking
@@ -110,6 +114,8 @@ template 5.
 - Name the trigger: the measurement or event that would move the card into `doing/`.
 - Do not plan the work. A plan for work nobody is doing is a guess.
 - Reply in one line: the path, and the trigger you wrote down.
+- The page is edited while it waits: a leftover from a closed card, or a trigger that has moved,
+  rewrites one line. Say which page, and what changed on it.
 
 ## Not worth a card
 
@@ -450,7 +456,8 @@ Closing is a distillation, not a tidy-up. Three moves:
 2. Conclusions out of the log.
    - `## Outcome` carries Before, After and the Command.
    - Every decision has its row and its rejected alternative.
-   - `## Residual` names what is open.
+   - `## Residual` names what is open, and the page each leftover lands on.
+   - Edit those pages in the same session; a leftover that waits for a later session is lost.
 3. Delete. `git rm flow-trail/doing/<card>/progress.md`, then `git mv` the card into `done/`.
 
 - No summary pass. If closing needed one, the README was not written while the work happened.
@@ -472,7 +479,7 @@ Closing is a distillation, not a tidy-up. Three moves:
 bash <this-skill>/scripts/flow-trail-lint.sh flow-trail
 ```
 
-- Nineteen checks: a card in `doing/` has both files, no `progress.md` in `done/`, six headings.
+- Twenty checks: a card in `doing/` has both files, no `progress.md` in `done/`, six headings.
 - And: no surviving checkbox, a backlog card carries no `progress.md`, skip rows have four cells.
 - And: findings is linked from its README, every findings heading is `## F<n> —` plus an optional
   `## Reference` and `## Receipts`, each `F` entry carries `Cost if unknown` and `Cited by`.
@@ -482,9 +489,10 @@ bash <this-skill>/scripts/flow-trail-lint.sh flow-trail
   it, which is why a citation is not a line number.
 - And: no `Enforced by` cell points at `progress.md`, which is deleted at close.
 - And: every `usage.md` row names a card and a finding that exist, with a `ref` that resolves.
-- Three warnings: closed README 120 lines, findings 200, more than one card in `doing/`.
-- And: a closed card with findings and no usage row after `FLOW_TRAIL_SILENT_DAYS` (default 30).
-- One more: a citation written as `path:line` warns, because nothing can check it.
+- Six warnings: closed README 120 lines, findings 200, more than one card in `doing/`, a card with
+  no `usage.md` beside it (the log arrived in 0.3.0), a closed card unused for
+  `FLOW_TRAIL_SILENT_DAYS` (default 30), and a citation written as `path:line`, which nothing can
+  check.
 - Reports, exits 1, gates nothing. No skill directory? Skip it.
 - Templates in this file: `bash <this-skill>/scripts/template-lint.sh`.
   Prose lint skips fenced blocks, so nothing else checks what a verbatim copy inherits.

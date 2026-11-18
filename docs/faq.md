@@ -16,6 +16,12 @@ trying to do.
   it at session start.
 - **What if the idea in the backlog grows?** Edit the page. It stays one page until someone
   starts it.
+- **Is the backlog a roadmap?** It reads like one, because it is the list of what you meant to
+  build. Nothing converts it into one: no dates, no quarters, no priorities beyond the order the
+  pages arrived in.
+- **Does the backlog go stale?** Only if nothing edits it. A closed card writes its leftover line
+  onto the page it came from, and a plan in the same area starts the page or says in one line why
+  it stays parked. A page nobody has touched in a year is a page nobody wants.
 - **Can a card stay open for months?** Yes. `next:` and the date of the last note say how long it
   has been waiting.
 

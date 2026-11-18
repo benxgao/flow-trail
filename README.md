@@ -16,19 +16,30 @@ Paste this at your agent, with the repository open:
 
 ```text
 Install flow-trail in this repository:
-  git clone -q --depth 1 https://github.com/benxgao/flow-trail ~/.flow-trail 2>/dev/null || git -C ~/.flow-trail pull -q
-  bash ~/.flow-trail/scripts/install.sh
-Show me the output, and do not edit AGENTS.md, .gitignore or flow-trail/ yourself.
+  bash -c "$(curl -fsSL https://raw.githubusercontent.com/benxgao/flow-trail/main/scripts/bootstrap.sh)"
+Show me the output, and the version it prints last.
+Do not edit AGENTS.md, .gitignore or flow-trail/ yourself.
 Then tell me the sentence that opens the first card.
 ```
 
-- One paste. It links the skill, writes the `AGENTS.md` pointer, keeps the skill's source out of
-  your `.gitignore`, and creates `flow-trail/`. Nothing else to configure.
-- It reports each path it changed, and `(already there)` for the ones it skipped.
-- By hand it is the same two commands; `--dry-run` first if you want to read them:
+- One paste, and the same paste upgrades. The script asks the remote for its newest tag, downloads
+  that release, and moves whichever install this repository already has: a copy owned by
+  `npx skills`, or a link into `~/.flow-trail`.
+- It links the skill, writes the `AGENTS.md` pointer, keeps the skill's source out of your
+  `.gitignore`, and creates `flow-trail/`. Nothing else to configure.
+- It reports each path it changed, `(already there)` for the ones it skipped, and ends on the
+  version it read back from the manifest.
+- By hand it is the same command, and `--dry-run` prints the plan without writing it:
   [install](docs/install.md).
 - Claude Code, Codex, Copilot, Gemini, Cursor, WorkBuddy, DeepSeek Harness: the installer writes
   into the folder each one reads.
+
+One release behind is the same paste. [upgrade](docs/upgrade.md) has the measurements, including
+`npx skills update` printing `up to date` while it replaces twenty files, and the table of what
+each release asked of a card.
+
+Installed with `npx skills`? `~/.flow-trail` does not exist for that route: the scripts below are at
+`<repo>/.agents/skills/flow-trail/scripts/`.
 
 Then say what you want, in your own words:
 
@@ -55,9 +66,26 @@ A board in motion, one card per column: [examples/](examples/). Open it and ask 
 | the rejected option matters as much as the chosen one | one chat session finishes it |
 | work pauses in one chat and resumes in another | you want a hosted board with a UI |
 | a number has to hold up when its command is re-run | the plan is an agreement a team signs |
+| ideas arrive faster than any of them can start | the roadmap has dates and owners |
 
 - The right column is not a list of defects; each of those alternatives does a job this cannot.
 - Scope: the board and the record. Running the work belongs to your assistant.
+
+## More ideas than weeks
+
+A plan arrives, and you cannot start it. It gets one page and a trigger, and it waits.
+
+- Twelve weeks of that is a backlog nobody curated, and a roadmap nobody sat down to write.
+- Pages are not frozen while they wait: a closed card writes its leftover line onto the page it
+  came from, and a trigger that fires moves one into `doing/`.
+- So the next feature starts by reading them, before the plan exists.
+
+![Six parked pages, three about one table, and today's request](docs/backlog.svg)
+
+- The plan for today is one of those pages: `git mv backlog/<card> doing/<card>`, and the page
+  becomes the card's README.
+- The other five keep their trigger. One that no longer fits is edited, or deleted.
+- Say `what in the backlog touches this?` before the plan. The answer is paths, not priorities.
 
 ## How you know it is working
 

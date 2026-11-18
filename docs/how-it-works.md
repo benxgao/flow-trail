@@ -44,6 +44,23 @@ flow-trail/
 - The state file is the only one added on the way in and removed on the way out.
 - Starting a card writes `progress.md`; closing it deletes the file.
 
+## The backlog, kept current
+
+- An idea gets a page the day it arrives, with the trigger that would start it.
+- The backlog is read at two moments: when a plan opens, and when a card closes.
+- Between them it is edited, never rewritten. The page keeps the idea as it arrived.
+
+| Event | What happens to the page |
+| --- | --- |
+| a plan opens in the same area | it is started, or it gets one line saying why it stays parked |
+| a card closes with leftover work | one `Residual` line is added to the page that leftover names |
+| a trigger fires | `git mv` into `doing/`; the page becomes the card's README |
+| the idea stops mattering | the folder is deleted; the commit is the record |
+
+- Twelve weeks of that is a roadmap nobody had to schedule.
+- Nothing summarises the backlog into one plan: the summary is the copy that goes stale.
+- The reading is `grep -l -i "<the area>" flow-trail/backlog/*/README.md`, once per plan.
+
 ## Three files, three jobs
 
 | File | Holds | Kind | Dies when |
@@ -151,7 +168,9 @@ bash <this-skill>/scripts/flow-trail-lint.sh flow-trail
 - And: every citation resolves. `path :: needle` — the file exists and the string is still in it.
   A `path:line` citation warns instead, because no check can tell a moved line from a dead one.
 - And: a closed README never points at `progress.md`, which is deleted at close.
-- Three warnings: closed README over 120 lines, findings over 200, more than one card in `doing/`.
+- Six warnings: closed README over 120 lines, findings over 200, more than one card in `doing/`,
+  a card with no `usage.md` beside it, a closed card unused past `FLOW_TRAIL_SILENT_DAYS`, and a
+  `path:line` citation.
 - It reports, exits 1 on error, gates nothing. No CI job, on purpose.
 
 ## The session-start hook
@@ -196,13 +215,14 @@ bash <this-skill>/scripts/verify-outcome.sh --run    # run and compare
 A record nobody reads is a write-only file. Three commands are the read path:
 
 ```bash
-grep -l -i "<the area>" flow-trail/done/*/README.md 2>/dev/null || true
+grep -l -i "<the area>" flow-trail/{done,backlog}/*/README.md 2>/dev/null || true
 bash <skill>/scripts/session-start.sh
 bash <skill>/scripts/flow-trail-stats.sh
 ```
 
-- The first runs before opening a card.
+- The first runs before opening a card, over the archive and the parked pages.
 - A closed card that already learned something should be cited, not rediscovered.
+- A parked page in the same area is either the card about to be opened, or a line saying why not.
 - The second runs every session, through the hook.
 - The third is the only view of the whole board, and the only one that can say a card is not being
   used:

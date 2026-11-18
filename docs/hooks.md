@@ -17,6 +17,14 @@ doing: flow-trail/doing/jwt-policy — P2 — run npm test, then close [last 202
 - It adds one line naming the three most recently closed cards, and one `--add` command for the
   usage log underneath it. That is the only reminder an agent gets that retrieval is meant to be
   recorded, so it is printed at the start of every session rather than in a document.
+- It ends with the number of parked pages, because a backlog nobody counts is a backlog nobody
+  reads:
+
+```
+backlog: 7 parked pages — read the ones in this area before writing a plan
+```
+
+- A count, not a list. `ls flow-trail/backlog/` is the list, and it changes while you read it.
 - It prints nothing in a project without a `flow-trail/` folder: no noise elsewhere.
 
 Test it before wiring anything:

@@ -77,4 +77,15 @@ else
   fi
 fi
 
+# The backlog is the roadmap, and a session only sees it if something says how
+# many pages are there. A count, not a list: `ls` is the list.
+if [ -d "$ROOT/backlog" ]; then
+  parked=$(find "$ROOT/backlog" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
+  if [ "${parked:-0}" -gt 0 ]; then
+    noun=pages
+    [ "$parked" -eq 1 ] && noun=page
+    echo "backlog: $parked parked $noun — read the ones in this area before writing a plan"
+  fi
+fi
+
 exit 0

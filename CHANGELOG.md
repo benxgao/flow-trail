@@ -5,6 +5,51 @@
 
 ## Unreleased
 
+## 0.7.0 — 2026-11-19
+
+An upgrade was the one path with no page, and the one command that could not be checked.
+Measured on 0.1.2 → 0.6.1: `npx skills update` replaced twenty files and printed
+`✓ All project skills are up to date`, which is the four lines it prints when there is
+nothing to do. The installer answered `another copy; rm -r … to relink here`, naming
+neither version, and a card written before 0.4.0 failed the linter under a code with no
+release attached. Install and upgrade are now one pasted command: it asks the remote for
+its newest tag, moves only the owner this repository actually has, and ends on the
+version it read back from the manifest.
+
+### Added
+
+- `scripts/bootstrap.sh`: one command for install and upgrade. It asks the remote for its newest
+  tag, reads the version on disk, moves only the owner it finds (`npx skills update` for a copy,
+  a forced checkout plus `install.sh` for a link), then prints the version read back from the
+  manifest. `--dry-run`, `--main`, and a refusal to move backwards from a checkout ahead of the
+  newest tag.
+- `docs/upgrade.md`: which release is installed, the two owners and the command that moves each,
+  the four lines `npx skills update` prints whether or not it worked, and one row per release for
+  what a card had to gain. It opens with the paste for an agent, and keeps the typed commands as
+  the second route.
+- `install.sh --relink`: replaces a copy in a harness folder when its `SKILL.md` says
+  `name: flow-trail`. It is the upgrade command for the installer route and the only step here
+  that deletes anything.
+- `install.sh` prints a `project` line when `<repo>/.agents/skills/flow-trail` is not the version
+  being installed: that is the copy `npx skills` writes, and a harness reads it instead of the link.
+- `install.sh` names the release behind a stale board: `cards` for a card older than 0.2.1 or 0.4.0,
+  `board` for a folder note with no `usage.md` row.
+- Lint W6: a card exists and `usage.md` does not.
+
+### Changed
+
+- `README.md` and `docs/install.md` open with one paste for install and upgrade both:
+  `bootstrap.sh` fetched from the default branch, so the logic that decides the version is never
+  an old copy of itself. The typed two commands stay as the second route.
+- `install.sh` prints the version it installs, and the version of every copy it leaves alone.
+  `(another copy; rm -r … to relink here)` named neither side.
+- E8, E13 and E14 append the release that added the rule, so an error reads as a migration step
+  rather than a code.
+- W5 no longer reports silence it cannot see: with no `usage.md`, a missing row is missing data.
+- `SKILL.md` creates `usage.md` with the first card, and names a board without one as pre-0.3.0.
+- `docs/install.md`: the scripts are not under `~/.flow-trail` for the `npx skills` route, the
+  folder note is reported rather than rewritten, and `usage.md` joins the table it was missing from.
+
 ## 0.6.1 — 2026-11-19
 
 One sentence, in the paragraph the whole page is built around. It said a falsified finding was "the

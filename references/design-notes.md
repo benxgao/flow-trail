@@ -48,6 +48,10 @@ Run 2: JWT hardening, 549 lines, 25 files, 19 minutes.
 
 - **`## Lessons` has never been populated under test.**
   - Kept on the strength of the source archive, not on evidence.
+- **The backlog read has not been run.**
+  - Both blind runs opened a card against an empty `backlog/`, so neither the plan-time grep nor
+    the write-back at close has been observed.
+  - The rule is kept because a page nobody reads at plan time is a page that never starts.
 - **The size boundary is a guess.**
   - Run 1 suggests the opt-out fires for anything one sitting can finish.
 - **One author, one model.**

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# flow-trail lint — nineteen checks over a flow-trail/ root.
+# flow-trail lint — twenty checks over a flow-trail/ root.
 #
 #   bash flow-trail-lint.sh [root]      # default: flow-trail
 #
@@ -43,7 +43,8 @@ check_findings() {
   local dir="$1" f="$1/findings.md" bad nf nc ncite
   [ -f "$f" ] || return 0
   bad=$(grep -E '^## ' "$f" | grep -vE '^## F[0-9]+ — |^## Reference|^## Receipts' | head -1)
-  [ -z "$bad" ] || err "E8 findings heading is not '## F<n> — ' / Reference / Receipts: $dir -> $bad"
+  [ -z "$bad" ] ||
+    err "E8 findings heading is not '## F<n> — ' / Reference / Receipts: $dir -> $bad (renamed in 0.2.1)"
   nf=$(grep -cE '^## F[0-9]+ — ' "$f" || true)
   nc=$(grep -c '\*\*Cost if unknown\*\*' "$f" || true)
   ncite=$(grep -c '\*\*Cited by\*\*' "$f" || true)
@@ -53,12 +54,13 @@ check_findings() {
   # The admission test: if the repository can rebuild the claim, the finding is a
   # cache of the code and can only go stale.
   nwhy=$(grep -c '\*\*Not in the code because\*\*' "$f" || true)
-  [ "$nwhy" -eq "$nf" ] || err "E13 $nf finding(s) but $nwhy 'Not in the code because' line(s): $dir"
+  [ "$nwhy" -eq "$nf" ] ||
+    err "E13 $nf finding(s) but $nwhy 'Not in the code because' line(s): $dir (added in 0.4.0)"
 
   # A claim nobody can notice going false is a liability, not evidence.
   nrot=$(grep -cE '^- \*\*(Check|Dies when)\*\*' "$f" || true)
   [ "$nrot" -eq "$nf" ] ||
-    err "E14 $nf finding(s) but $nrot 'Check' or 'Dies when' line(s): $dir"
+    err "E14 $nf finding(s) but $nrot 'Check' or 'Dies when' line(s): $dir (added in 0.4.0)"
 }
 
 # A citation is `path :: string that must still be there`. A line number is not
@@ -160,6 +162,15 @@ if [ -f "$ROOT/usage.md" ] && [ -x "$SCRIPT_DIR/flow-trail-usage.sh" ]; then
   done < <(bash "$SCRIPT_DIR/flow-trail-usage.sh" --check "$ROOT" 2>/dev/null)
 fi
 
+# The log arrived in 0.3.0, beside the columns. A board with cards and no log was
+# written before that, or by hand: either way the silence below is missing data,
+# not evidence, and the count of unused findings would be a guess dressed as one.
+if [ ! -f "$ROOT/usage.md" ] &&
+   [ -n "$(find "$ROOT/backlog" "$ROOT/doing" "$ROOT/done" -mindepth 1 -maxdepth 1 -type d \
+     2>/dev/null | head -1)" ]; then
+  warn "W6 a card exists and usage.md does not (added in 0.3.0): create it from template 6"
+fi
+
 # Silence is the third state, and after a month it is worth a prompt: a card
 # nobody has used may be dead weight, or may be unfindable. The two need
 # different fixes, so the warning names the card rather than guessing.
@@ -172,6 +183,7 @@ days_since() {
 
 while IFS= read -r dir; do
   [ -f "$dir/findings.md" ] || continue
+  [ -f "$ROOT/usage.md" ] || continue
   finds=$(grep -cE '^## F[0-9]+ — ' "$dir/findings.md" || true)
   [ "$finds" -gt 0 ] || continue
   name=$(basename "$dir")
