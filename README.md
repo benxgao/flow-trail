@@ -94,7 +94,7 @@ like bookkeeping. They are four answers to four questions you would otherwise gu
 ![Day 1 written, day 9 applied, day 40 falsified, day 41 retired](docs/life.svg)
 
 - `falsified` is the row people misread. It is not a defect report; it is the moment a claim stopped
-  costing anyone anything.
+  being able to waste an afternoon.
 - A finding that cannot go wrong is a finding nobody checked.
 - Nothing here needs a review meeting. A `Check` command fails, or a `Dies when` date passes, and
   the row is due. That is the whole maintenance schedule.

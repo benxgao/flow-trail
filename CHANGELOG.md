@@ -5,6 +5,16 @@
 
 ## Unreleased
 
+## 0.6.1 — 2026-11-19
+
+One sentence, in the paragraph the whole page is built around. It said a falsified finding was "the
+moment a claim stopped costing anyone anything", which reads as "became worthless". It now says the
+claim stopped being able to waste an afternoon, which is what happens.
+
+### Changed
+
+- README, the `falsified` bullet: same idea, in words that cannot be read backwards.
+
 ## 0.6.0 — 2026-11-19
 
 The proof was in the docs, written for someone who already cared. The README now leads with it, in
