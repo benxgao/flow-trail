@@ -5,6 +5,15 @@
 
 ## Unreleased
 
+## 0.3.1 — 2026-11-19
+
+One label, corrected. The footer said "of N with a citation", and N was every finding, cited or
+not — a label naming a different set than it counts is the defect this release line is about.
+
+### Changed
+
+- `flow-trail-stats.sh` prints "N of M finding(s) used at least once".
+
 ## 0.3.0 — 2026-11-19
 
 `stats.sh` measured the card. Nothing measured the later task that read it. A log now records that

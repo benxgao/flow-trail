@@ -214,7 +214,7 @@ EOF
 "
       done
     done
-    printf '\n%d finding(s) used at least once, of %d with a citation. ' "$u_used" "$u_finds"
+    printf '\n%d of %d finding(s) used at least once. ' "$u_used" "$u_finds"
     printf 'A finding used once and never again was an onboarding note.\n'
     if [ -n "$unused_lines" ]; then
       printf 'nothing has used yet:\n%s' "$unused_lines"
