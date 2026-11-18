@@ -102,7 +102,7 @@ ls flow-trail/                           # README.md  skips.md
 ## The scripts, optional
 
 ```bash
-bash ~/.flow-trail/scripts/flow-trail-lint.sh flow-trail   # card shape, fifteen checks
+bash ~/.flow-trail/scripts/flow-trail-lint.sh flow-trail   # card shape, nineteen checks
 bash ~/.flow-trail/scripts/verify-outcome.sh --run         # re-run closed cards' Outcomes
 bash ~/.flow-trail/scripts/flow-trail-stats.sh             # one row per card
 ```

@@ -275,11 +275,16 @@ almost never true.>
 
 Copy verbatim into `flow-trail/doing/<card>/findings.md`.
 
-- A finding is something you did not know before, and that changes a decision. A number that only
-  proves the work happened is a receipt, and receipts go at the bottom.
+- A finding is something you did not know before, that changes a decision, and that the repository
+  cannot tell you. A number that only proves the work happened is a receipt, and receipts go at the
+  bottom.
+- If `grep` in this repo can rebuild the claim, it is not a finding: the code is the document, and a
+  copy of it can only go stale. `src/DELETE has no caller` is a finding for a week; `the cap is
+  100 KB` is a line of code wearing a heading.
 - Ordered by what it costs the next reader **not** to know. Not by date: the expensive one is
   rarely the last one found.
-- Every entry names what cites it. One that nothing cites is the first candidate for retirement.
+- Every entry names what cites it, why the code cannot supply it, and how a reader will notice it
+  has gone false. One with no way to notice is a liability, not evidence.
 - A citation is a path plus a string that must still be in that file — `fixtures.ts :: function
   scopeToStage(` — never a line number. A line number is false after the next commit above it, and
   no check can tell a moved citation from a missing one. The linter greps the string.
@@ -297,8 +302,10 @@ that has stopped mattering can be found and retired instead of outliving its use
 - **Saw** (<date>, <where>) — <the observation, and the command or path that produced it>
 - **Means** — <what it implies for the code or the plan>
 - **Cost if unknown** — <what the next person would do instead, and how long it would take>
+- **Not in the code because** — <why this repo cannot recover it; `derivable` is no answer>
 - **Cited by** — `path :: a string still in that file`, `#F1` in the code, or `nothing yet`
-- **Status** — <fixed / kept / still open, one clause>
+- **Check** — `<command; exit 0 while the claim still holds>`, or
+- **Dies when** — <the event that makes it false>. Exactly one of these two.
 
 ## Reference — <a table someone will look up>, verified <date>
 
@@ -465,10 +472,12 @@ Closing is a distillation, not a tidy-up. Three moves:
 bash <this-skill>/scripts/flow-trail-lint.sh flow-trail
 ```
 
-- Seventeen checks: a card in `doing/` has both files, no `progress.md` in `done/`, six headings.
+- Nineteen checks: a card in `doing/` has both files, no `progress.md` in `done/`, six headings.
 - And: no surviving checkbox, a backlog card carries no `progress.md`, skip rows have four cells.
 - And: findings is linked from its README, every findings heading is `## F<n> —` plus an optional
   `## Reference` and `## Receipts`, each `F` entry carries `Cost if unknown` and `Cited by`.
+- And: each entry carries `Not in the code because` — the admission test — and one of `Check` or
+  `Dies when`, so a claim that can no longer be true is noticed instead of believed.
 - And: every citation resolves — `path :: needle` names a file that exists and a string still in
   it, which is why a citation is not a line number.
 - And: no `Enforced by` cell points at `progress.md`, which is deleted at close.

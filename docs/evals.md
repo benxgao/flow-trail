@@ -9,6 +9,55 @@ because of what is in here." Re-reading the card cannot test that claim. Three t
 
 `flow-trail-stats.sh` prints 1 and 2. This page is about reading them, and about 3.
 
+## What earns a place
+
+The folder is only worth maintaining for what the repository cannot say. Sort every candidate claim
+into one of four classes; two of them are findings.
+
+| Class | Example | Can this repo tell you? | Rots? | Where it goes |
+| --- | --- | --- | --- | --- |
+| Landmine | MailerLite answers 200 on a repeat add | no — a live probe only | yes, if upstream changes | a finding with `Dies when` |
+| Judgement | the `ttl` argument is ignored | the fact, not the verdict | no | a finding with `Check` |
+| Why-not | envelope unification was rejected | no — the loser left nothing | no | `## Decisions`, not findings |
+| Restatement | the body cap is 100 KB | yes, `grep MAX_BODY_BYTES` | the moment it changes | delete it |
+
+- A **landmine** is a fact about the world outside the repo, and reading our code cannot produce it.
+- A **judgement** is a fact the code holds plus the verdict "this is wrong", and the verdict is the
+  part that costs a day to rebuild.
+- A **why-not** is history. It has its own table, and a finding is the wrong place for it.
+- A **restatement** is a cache of the code with no upside and one failure mode: it lies after the
+  next commit. This class is why people stop trusting the folder, and the lint cannot detect it —
+  only the author can, by answering `Not in the code because` honestly.
+
+`Not in the code because` is the admission test. If the honest answer is "you grep it and you know",
+the finding must be deleted, not written.
+
+## Why an agent reads this instead of the code
+
+Two reasons, and neither is "documentation is good".
+
+- **Code answers questions; it does not raise them.** Nothing in `src/` suggests the question "does
+  MailerLite drop fields the workspace has not defined?". A reader who does not already suspect it
+  will never grep for it, and the bug stays. The finding is a question someone already paid for.
+- **Cost.** Rebuilding one runtime fact means reading the handler, the integration client, the
+  fixtures and a test that does not exist yet. The finding is eight lines. That is the whole
+  trade, and it is measurable: `cost per use` in the table above.
+
+The trade fails when the eight lines can be replaced by one grep. That is the restatement class, and
+deleting it is the maintenance.
+
+## The maintenance budget
+
+A finding is written once, in the session that discovered it, and never edited afterwards. Two
+things touch it later, and both are triggered by a command rather than by discipline:
+
+1. Its `Check` fails, or its `Dies when` happens. Re-derive, then rewrite the row as a `falsified`
+   event and delete the claim.
+2. `usage.md` says nobody used it in 90 days and it is greppable. Delete the row.
+
+Nothing else. There is no review cadence, no owner, and no "keep the docs up to date" chore, because
+a chore with no trigger is the thing that turns a folder into a liability.
+
 ## The three states
 
 Every finding is in exactly one state, and the log is the only thing that tells them apart.

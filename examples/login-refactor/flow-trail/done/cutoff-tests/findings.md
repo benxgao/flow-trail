@@ -17,8 +17,13 @@ reader **not** to know — not by when it was found. Each entry ends with what c
   There was no date anywhere in the path: `grep -c CUTOFF` returned 0.
 - **Cost if unknown** — the next person reads "we migrated to RS256" from the title, sees HS256
   still signing, and concludes the migration failed rather than that it was never finished.
+- **Not in the code because** — the old function is gone. What is left, `issuedAt < CUTOFF`, reads
+  as obviously correct, and nothing in the file suggests it was once `process.env.JWT_SECRET`. The
+  argument for the date over the flag survives only in the Decisions table.
 - **Cited by** — `app/src/session.js :: CUTOFF` — the two switches; and
   `app/test/session.test.js :: the cutoff itself is the switch`.
+- **Check** — `cd app && node --test --test-name-pattern cutoff` — exit 0 while the date still
+  decides.
 - **Status** — fixed; the date decides now, and the secret only decides inside the window.
 
 ## Receipts

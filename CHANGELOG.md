@@ -5,6 +5,36 @@
 
 ## Unreleased
 
+## 0.4.0 — 2026-11-19
+
+Three objections, one of them fatal to the old template: a finding that restates the code is a cache
+that can only lie, and nothing stopped one from being written.
+
+### Added
+
+- `Not in the code because` on every finding: the admission test. If a grep in this repo rebuilds
+  the claim, the finding must be deleted, not written. Lint E13 counts it per entry.
+- `Check` or `Dies when` on every finding, exactly one: a command that exits non-zero when the claim
+  stops holding, or the event that makes it false. A claim nobody can notice going false is a
+  liability. Lint E14 counts it.
+- `docs/evals.md` "What earns a place": landmine, judgement, why-not, restatement — the last two
+  do not belong in findings, and the restatement class makes people stop trusting the folder.
+- `docs/evals.md` "The maintenance budget": one write, two command-triggered deletions, no review
+  cadence.
+
+### Changed
+
+- Template 3 fields are now Saw / Means / Cost if unknown / Not in the code because / Cited by /
+  Check-or-Dies-when / Status.
+- Every finding in the reference card and the example board was rewritten against the new test; two
+  of them passed only by being explicit about what they are not.
+
+### Removed
+
+- The idea that a finding can be "just evidence". Evidence that the repository already holds is a
+  copy, and a copy has one behaviour: it goes stale.
+
+
 ## 0.3.1 — 2026-11-19
 
 One label, corrected. The footer said "of N with a citation", and N was every finding, cited or

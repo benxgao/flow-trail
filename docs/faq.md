@@ -38,6 +38,16 @@ trying to do.
 - **How do I know whether anyone is using the board?** `flow-trail-stats.sh` prints one row per
   card. `cited` says what the card points at; the usage table under it says what a later task
   actually consumed. Only the second is about retrieval.
+- **Why would an agent read this instead of the code?** Because code answers questions and never
+  raises them. Nothing in `src/` suggests "does the upstream drop fields the workspace has not
+  defined?" — a reader who does not suspect it will not grep for it. The second reason is cost:
+  one runtime fact otherwise costs a handler, a client, a fixture and a test that does not exist.
+- **What should never become a finding?** Anything a grep in this repo can rebuild. That is a cache
+  of the code with no upside and one failure mode: it lies after the next commit. The field that
+  forces the question is `Not in the code because`, and "you grep it and you know" is a delete.
+- **What if a finding goes stale?** That is what `Check` and `Dies when` are for: every finding
+  carries a command that fails, or the event that makes it false, so staleness is loud rather than
+  silent. A finding with neither is a liability and fails the lint.
 - **What counts as usage?** A finding that changed what was done, or one that turned out to be
   false. Reading a card is not usage, and neither is a row whose `ref` does not resolve.
 - **Who writes the row?** The session that used the finding, before it ends, with

@@ -141,12 +141,13 @@ git mv flow-trail/doing/<card> flow-trail/done/<card>
 bash <this-skill>/scripts/flow-trail-lint.sh flow-trail
 ```
 
-- Eleven error checks: a card in `doing/` has both files; a card in `backlog/` has one.
+- Thirteen error checks: a card in `doing/` has both files; a card in `backlog/` has one.
 - And: no `progress.md` in `done/`; six headings; no checkbox; findings linked from its README.
 - And: skip rows carry four cells.
 - And: findings headings are `## F<n> —`, `## Reference` or `## Receipts`; a `## Measurements`
   section is a receipt wearing a finding's name.
 - And: each `F` entry carries `Cost if unknown` and `Cited by`, counted per file.
+- And: each `F` entry carries `Not in the code because`, and exactly one of `Check` / `Dies when`.
 - And: every citation resolves. `path :: needle` — the file exists and the string is still in it.
   A `path:line` citation warns instead, because no check can tell a moved line from a dead one.
 - And: a closed README never points at `progress.md`, which is deleted at close.

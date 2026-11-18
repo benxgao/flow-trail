@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# flow-trail lint — fifteen checks over a flow-trail/ root.
+# flow-trail lint — nineteen checks over a flow-trail/ root.
 #
 #   bash flow-trail-lint.sh [root]      # default: flow-trail
 #
@@ -49,6 +49,16 @@ check_findings() {
   ncite=$(grep -c '\*\*Cited by\*\*' "$f" || true)
   [ "$nc" -eq "$nf" ] || err "E9 $nf finding(s) but $nc 'Cost if unknown' line(s): $dir"
   [ "$ncite" -eq "$nf" ] || err "E9 $nf finding(s) but $ncite 'Cited by' line(s): $dir"
+
+  # The admission test: if the repository can rebuild the claim, the finding is a
+  # cache of the code and can only go stale.
+  nwhy=$(grep -c '\*\*Not in the code because\*\*' "$f" || true)
+  [ "$nwhy" -eq "$nf" ] || err "E13 $nf finding(s) but $nwhy 'Not in the code because' line(s): $dir"
+
+  # A claim nobody can notice going false is a liability, not evidence.
+  nrot=$(grep -cE '^- \*\*(Check|Dies when)\*\*' "$f" || true)
+  [ "$nrot" -eq "$nf" ] ||
+    err "E14 $nf finding(s) but $nrot 'Check' or 'Dies when' line(s): $dir"
 }
 
 # A citation is `path :: string that must still be there`. A line number is not
