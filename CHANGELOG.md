@@ -5,6 +5,23 @@
 
 ## Unreleased
 
+## 0.7.2 — 2026-11-27
+
+The checker could say `ok` to a row it had not read. A pipe inside an Outcome cell is written
+`\|`, and the split ran before the escape was decoded, so a piped Command cut the Verify column
+in two: the old script printed `ok` while running `tr -d " " | [ … ]`, an assertion that exits 0
+by accident. The walk started at `done/`, so a `planned` row in an open card was never seen, and a
+closed card still holding an unmeasured number passed as long as its Verify said `manual`.
+
+### Changed
+
+- `scripts/verify-outcome.sh`: decodes `\|` before the column split, restores it after, so a piped
+  Command stays one cell.
+- `scripts/verify-outcome.sh`: walks `doing/` and `done/`. A `planned` After is `plan` in an open
+  card and `DRIFT` in a closed one; the summary line counts it.
+- `SKILL.md`: the Outcome template says `planned` is read by the script, and a Verify asserts the
+  behaviour the row added, never a total.
+
 ## 0.7.1 — 2026-11-19
 
 The one command 0.7.0 opens with pointed at a branch this repository does not have. The paste URL

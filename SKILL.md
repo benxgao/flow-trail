@@ -223,11 +223,15 @@ Detail behind these conclusions: [`findings.md`](./findings.md).
 
 ## Outcome
 
-<Fill at close, or at planning with the numbers marked `planned`. Three sentences at most, then the
-table. The Command column is not optional: it is the only copy left once `progress.md` is gone.
+<Fill at close, or at planning with the numbers marked `planned` — the word is read by
+`verify-outcome.sh`, which skips the row in `doing/` and fails it in `done/`. Three sentences at most,
+then the table. The Command column is not optional: it is the only copy left once `progress.md` is
+gone.
 `Verify` is the optional strict form: one assertion that exits 0 while the After value is still
 true. Without it the checker can only ask whether the After text appears in the output, which is
-why a row written in prose reports DRIFT on a card that is perfectly healthy.>
+why a row written in prose reports DRIFT on a card that is perfectly healthy. Assert the behaviour
+the row added — a test file — never a total: `=== 8` on a route count turns red the day someone
+adds the ninth, which is a change the card wanted.>
 
 | Metric | Before | After | Command | Verify |
 | --- | --- | --- | --- | --- |
@@ -518,7 +522,10 @@ bash <this-skill>/scripts/flow-trail-stats.sh --verify   # and re-run every Outc
 bash <this-skill>/scripts/verify-outcome.sh --run
 ```
 
-- Re-runs every command in the closed cards' `## Outcome` tables.
+- Re-runs every command in the `## Outcome` tables of `done/` **and** `doing/`.
+- A row whose After says `planned` is `plan`: nothing has been measured, so nothing to verify —
+  and a number still `planned` in a closed card is a DRIFT, because that card claims a measurement
+  it never took.
 - Reports `ok`, `LOOSE`, `skip`, `DRIFT`, `FAIL`; exits 1 on a strict drift or a command failure.
 - A row with a `Verify` assertion is strict: exit 0 is `ok`, anything else is `DRIFT`.
 - A row without one is `loose`: it only asks whether the After text appears in the output. A `loose`

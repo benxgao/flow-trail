@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
-# Re-runs the commands recorded in each closed card's `## Outcome` table.
+# Re-runs the commands recorded in each card's `## Outcome` table — `done/` and
+# `doing/`, so a number written before it was measured is caught while it is still
+# a plan rather than after the card closes.
 #
 #   bash verify-outcome.sh [root]          # dry run: list what would be run
 #   bash verify-outcome.sh --run [root]    # actually execute the commands
 #
-# A row can say two things:
+# A row can say three things:
 #
 #   Verify cell present  -> an assertion. Exit 0 is `ok`; anything else is `DRIFT`.
 #   Verify cell absent   -> `LOOSE`: the recorded After text must appear in the
 #                           output of the Command. A LOOSE row in prose always
 #                           reads as a mismatch, so LOOSE never fails the run.
+#   After says `planned` -> `plan` in `doing/` (nothing to verify yet), `DRIFT` in
+#                           `done/` (a closed card may not hold an unmeasured number).
 #
 # Exit 1 only for a strict DRIFT or a command failure. A checker that goes all red
 # on a healthy card teaches people to ignore it, which is worse than no checker.
@@ -28,7 +32,8 @@ for arg in "$@"; do
   esac
 done
 
-[ -d "$ROOT/done" ] || { printf 'no %s/done/ here — nothing to verify\n' "$ROOT"; exit 0; }
+[ -d "$ROOT/done" ] || [ -d "$ROOT/doing" ] ||
+  { printf 'no %s/done/ or %s/doing/ here — nothing to verify\n' "$ROOT" "$ROOT"; exit 0; }
 
 # The recorded commands were written for the project root, not for wherever the
 # reader happens to stand. `dirname flow-trail` is "." when run from the root.
@@ -37,24 +42,35 @@ PROJ=$(cd "$(dirname "$ROOT")" && pwd)
 checked=0
 okcount=0
 loose=0
+planned=0
 drift=0
 driftcmd=0
 
 while IFS= read -r track; do
   label=$(basename "$track")
-  # metric, after, command, verify. A fifth cell is rebuilt from the remaining
-  # fields so a stray pipe inside it does not silently truncate the assertion.
+  col=$(basename "$(dirname "$track")")
+  # A cell writes a literal pipe as `\|`, because a bare one ends the column. The
+  # command must run with a real pipe, so the escape is decoded before the split —
+  # otherwise a pipeline inside a cell is cut into pieces and shoved into the next
+  # column, and the assertion fails on a card that is perfectly healthy.
+  # A fifth cell is still rebuilt from the remaining fields, for a pipe written raw.
   rows=$(awk '
     /^## Outcome/ { inb = 1; next }
     /^## /        { inb = 0 }
     inb && /^\|/ {
-      n = split($0, a, "|")
+      line = $0
+      gsub(/\\\|/, "\001", line)
+      n = split(line, a, "|")
       if (n < 6) next
       metric = a[2]; after = a[4]; cmd = a[5]; verify = ""
       if (n >= 7) {
         verify = a[6]
         for (i = 7; i < n; i++) verify = verify "|" a[i]
       }
+      gsub(/\001/, "|", metric)
+      gsub(/\001/, "|", after)
+      gsub(/\001/, "|", cmd)
+      gsub(/\001/, "|", verify)
       gsub(/^[ \t]+|[ \t]+$/, "", metric)
       gsub(/^[ \t]+|[ \t]+$/, "", after)
       gsub(/^[ \t]+|[ \t]+$/, "", cmd)
@@ -71,6 +87,22 @@ while IFS= read -r track; do
 
   while IFS=$'\t' read -r metric after cmd verify; do
     checked=$((checked + 1))
+
+    # The template asks for `planned` in the After cell of a number nobody has
+    # measured yet. Open, that is honest; closed, it is the one thing a closed card
+    # may not be, so it counts against the run.
+    case "$after" in
+      *planned*)
+        if [ "$col" = "done" ]; then
+          printf 'DRIFT %-12s %-22s closed with an unmeasured number: %s\n' \
+            "$label" "$metric" "$after"
+          drift=$((drift + 1))
+        else
+          printf 'plan  %-12s %-22s %s\n' "$label" "$metric" "$after"
+          planned=$((planned + 1))
+        fi
+        continue ;;
+    esac
 
     # A leftover template placeholder is not an assertion; `manual` says a person
     # must run it (a deployed stage, a secret) and is never counted as drift.
@@ -126,7 +158,7 @@ while IFS= read -r track; do
       loose=$((loose + 1))
     fi
   done <<< "$rows"
-done < <(find "$ROOT/done" -mindepth 1 -maxdepth 1 -type d | sort)
+done < <(find "$ROOT/done" "$ROOT/doing" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort)
 
 if [ "$checked" -eq 0 ]; then
   printf 'no Outcome rows with a command yet\n'
@@ -138,8 +170,8 @@ if [ "$RUN" -eq 0 ]; then
   exit 0
 fi
 
-printf '\n%d rows: %d ok, %d loose, %d drifted, %d command failures\n' \
-  "$checked" "$okcount" "$loose" "$drift" "$driftcmd"
+printf '\n%d rows: %d ok, %d loose, %d planned, %d drifted, %d command failures\n' \
+  "$checked" "$okcount" "$loose" "$planned" "$drift" "$driftcmd"
 [ "$loose" -gt 0 ] &&
   printf 'loose rows are not a verdict: give them a Verify assertion to make them one\n'
 [ "$drift" -eq 0 ]
